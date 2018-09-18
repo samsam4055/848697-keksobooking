@@ -3,8 +3,8 @@
 var QUANTITY_SIMILARS_ADS = 8;
 var AVATAR_NAMES = ['01', '02', '03', '04', '05', '06', '07', '08'];
 var OFFER_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-var LOCATION_X_MIN = 300;
-var LOCATION_X_MAX = 900;
+var LOCATION_X_MIN = 100;
+var LOCATION_X_MAX = 1000;
 var LOCATION_Y_MIN = 130;
 var LOCATION_Y_MAX = 630;
 var PRICE_MIN = 1000;
@@ -74,20 +74,26 @@ window.getRandomAds = function () {
 var mapClass = document.querySelector('.map');
 mapClass.classList.remove('map--faded');
 
-var newPin = document.querySelector('.map__pins');
+var Ads = window.getRandomAds();
+var pins = document.querySelector('.map__pins');
+var fragmentPin = document.createDocumentFragment();
 var templatePin = document.querySelector('#pin');
-var clonePin = document.importNode(templatePin.content, true);
-var pinButton = clonePin.querySelector('button');
-var pinImg = clonePin.querySelector('img');
 
-pinButton.type = 'button';
-pinButton.class = 'map__pin';
-pinButton.style = 'left: 200px; top: 400px';
+for (var i = 0; i < Ads.length; i++) {
+  var clonePin = document.importNode(templatePin.content, true);
+  var pinButton = clonePin.querySelector('button');
+  var pinImg = clonePin.querySelector('img');
+  pinButton.type = 'button';
+  pinButton.class = 'map__pin';
+  pinButton.style = 'left: ' + Ads[i].location.x + 'px; top: ' + Ads[i].location.y + 'px';
 
-pinImg.src = 'img/avatars/user07.png';
-pinImg.width = '40';
-pinImg.height = '40';
-pinImg.draggable = 'false';
-pinImg.alt = 'Метка объявления';
+  pinImg.src = Ads[i].author.avatar;
+  pinImg.width = '40';
+  pinImg.height = '40';
+  pinImg.draggable = 'false';
+  pinImg.alt = Ads[i].offer.title;
 
-newPin.appendChild(clonePin);
+  fragmentPin.appendChild(clonePin);
+}
+
+pins.appendChild(fragmentPin);
