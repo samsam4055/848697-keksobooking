@@ -72,9 +72,10 @@ window.getRandomAds = function () {
 
 var Ads = window.getRandomAds();
 
-// Это временное решение, этот класс переключает карту из неактивного состояния в активное.
+
 var mapClass = document.querySelector('.map');
 mapClass.classList.remove('map--faded');
+
 
 var pins = document.querySelector('.map__pins');
 var fragmentPin = document.createDocumentFragment();
@@ -94,41 +95,66 @@ for (var i = 0; i < Ads.length; i++) {
 
 pins.appendChild(fragmentPin);
 
-var mapFilters = document.querySelector('.map__filters-container');
-var fragmentCard = document.createDocumentFragment();
-var templateCard = document.querySelector('#card');
+var showCard = function () {
+  var mapFilters = document.querySelector('.map__filters-container');
+  var fragmentCard = document.createDocumentFragment();
+  var templateCard = document.querySelector('#card');
+  var cloneCard = document.importNode(templateCard.content, true);
 
-var cloneCard = document.importNode(templateCard.content, true);
+  var activePin = document.querySelector('.map__pin--active');
+  var activePinAvatar = activePin.querySelector('img');
 
 
-fragmentCard.appendChild(cloneCard);
+  fragmentCard.appendChild(cloneCard);
 
-mapClass.insertBefore(fragmentCard, mapFilters);
+  mapClass.insertBefore(fragmentCard, mapFilters);
+};
+
+// Временно, для наглядности, делаем активным последний элемент
+var pinActive = document.querySelector('.map__pin:last-of-type');
+pinActive.classList.add('map__pin--active');
+//
+
+showCard();
 
 /*
 <!-- Модальное окно с информацией об объявлении -->
-  <template id="card">
-    <article class="map__card popup">
-      <img src="img/avatars/user01.png" class="popup__avatar" width="70" height="70" alt="Аватар пользователя">
-      <button type="button" class="popup__close">Закрыть</button>
-      <h3 class="popup__title">Уютное гнездышко для молодоженов</h3>
-      <p class="popup__text popup__text--address">102-0082 Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3</p>
-      <p class="popup__text popup__text--price">5200&#x20bd;<span>/ночь</span></p>
-      <h4 class="popup__type">Квартира</h4>
-      <p class="popup__text popup__text--capacity">2 комнаты для 3 гостей</p>
-      <p class="popup__text popup__text--time">Заезд после 14:00, выезд до 10:00</p>
-      <ul class="popup__features">
-        <li class="popup__feature popup__feature--wifi"></li>
-        <li class="popup__feature popup__feature--dishwasher"></li>
-        <li class="popup__feature popup__feature--parking"></li>
-        <li class="popup__feature popup__feature--washer"></li>
-        <li class="popup__feature popup__feature--elevator"></li>
-        <li class="popup__feature popup__feature--conditioner"></li>
-      </ul>
-      <p class="popup__description">Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована.</p>
-      <div class="popup__photos">
-        <img src="" class="popup__photo" width="45" height="40" alt="Фотография жилья">
-      </div>
-    </article>
-  </template>
-  */
+<template id="card">
+<article class="map__card popup">
+<img src="img/avatars/user01.png" class="popup__avatar" width="70" height="70" alt="Аватар пользователя">
+<button type="button" class="popup__close">Закрыть</button>
+<h3 class="popup__title">Уютное гнездышко для молодоженов</h3>
+<p class="popup__text popup__text--address">102-0082 Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3</p>
+<p class="popup__text popup__text--price">5200&#x20bd;<span>/ночь</span></p>
+<h4 class="popup__type">Квартира</h4>
+<p class="popup__text popup__text--capacity">2 комнаты для 3 гостей</p>
+<p class="popup__text popup__text--time">Заезд после 14:00, выезд до 10:00</p>
+<ul class="popup__features">
+<li class="popup__feature popup__feature--wifi"></li>
+<li class="popup__feature popup__feature--dishwasher"></li>
+<li class="popup__feature popup__feature--parking"></li>
+<li class="popup__feature popup__feature--washer"></li>
+<li class="popup__feature popup__feature--elevator"></li>
+<li class="popup__feature popup__feature--conditioner"></li>
+</ul>
+<p class="popup__description">Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована.</p>
+<div class="popup__photos">
+<img src="" class="popup__photo" width="45" height="40" alt="Фотография жилья">
+</div>
+</article>
+</template>
+*/
+/*
+Аттрибуты
+elem.hasAttribute(name) – проверяет наличие атрибута
+elem.getAttribute(name) – получает значение атрибута
+elem.setAttribute(name, value) – устанавливает атрибут и его значение
+elem.removeAttribute(name) – удаляет атрибут
+
+пример
+var pageHeading = document.querySelector('h1');
+pageHeading.setAttribute('style', 'background: red;');
+pageHeading.removeAttribute('style');
+*/
+// console.log(parseInt(window.getComputedStyle(activePin, null).width, 10));
+// console.log(parseInt(window.getComputedStyle(activePin, null).height, 10));
