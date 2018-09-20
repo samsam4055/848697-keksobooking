@@ -83,6 +83,7 @@ mapClass.classList.remove('map--faded');
 
 
 var pins = document.querySelector('.map__pins');
+var mapPin = pins.querySelector('.map__pin');
 var fragmentPin = document.createDocumentFragment();
 var templatePin = document.querySelector('#pin');
 
@@ -91,7 +92,7 @@ for (var i = 0; i < ads.length; i++) {
   var pinButton = clonePin.querySelector('button');
   var pinImg = clonePin.querySelector('img');
 
-  pinButton.style = 'left: ' + ads[i].location.x + 'px; top: ' + ads[i].location.y + 'px';
+  pinButton.style = 'left: ' + (ads[i].location.x - (pinImg.width / 2)) + 'px; top: ' + (ads[i].location.y - pinImg.height - parseInt(window.getComputedStyle(mapPin, '::after').height, 10)) + 'px';
   pinImg.src = ads[i].author.avatar;
   pinImg.alt = ads[i].offer.title;
 
@@ -170,56 +171,7 @@ var showCard = function (arr) {
   mapClass.insertBefore(fragmentCard, mapFilters);
 };
 
-// Временно, для наглядности, делаем активным последний элемент
 var pinActive = document.querySelector('.map__pin:last-of-type');
 pinActive.classList.add('map__pin--active');
-//
 
 showCard(ads);
-
-/*
-<!-- Модальное окно с информацией об объявлении -->
-<template id="card">
-<article class="map__card popup">
-<img src="img/avatars/user01.png" class="popup__avatar" width="70" height="70" alt="Аватар пользователя">
-<button type="button" class="popup__close">Закрыть</button>
-<h3 class="popup__title">Уютное гнездышко для молодоженов</h3>
-<p class="popup__text popup__text--address">102-0082 Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3</p>
-<p class="popup__text popup__text--price">5200&#x20bd;<span>/ночь</span></p>
-<h4 class="popup__type">Квартира</h4>
-<p class="popup__text popup__text--capacity">2 комнаты для 3 гостей</p>
-<p class="popup__text popup__text--time">Заезд после 14:00, выезд до 10:00</p>
-<ul class="popup__features">
-<li class="popup__feature popup__feature--wifi"></li>
-<li class="popup__feature popup__feature--dishwasher"></li>
-<li class="popup__feature popup__feature--parking"></li>
-<li class="popup__feature popup__feature--washer"></li>
-<li class="popup__feature popup__feature--elevator"></li>
-<li class="popup__feature popup__feature--conditioner"></li>
-</ul>
-<p class="popup__description">Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована.</p>
-<div class="popup__photos">
-<img src="" class="popup__photo" width="45" height="40" alt="Фотография жилья">
-</div>
-</article>
-</template>
-*/
-/*
-
-Для скрытия блоков есть класс hidden
-.classList.add('hidden');
-.classList.remove('hidden');
-
-Аттрибуты
-elem.hasAttribute(name) – проверяет наличие атрибута
-elem.getAttribute(name) – получает значение атрибута
-elem.setAttribute(name, value) – устанавливает атрибут и его значение
-elem.removeAttribute(name) – удаляет атрибут
-
-пример
-var pageHeading = document.querySelector('h1');
-pageHeading.setAttribute('style', 'background: red;');
-pageHeading.removeAttribute('style');
-*/
-// console.log(parseInt(window.getComputedStyle(activePin, null).width, 10));
-// console.log(parseInt(window.getComputedStyle(activePin, null).height, 10));
