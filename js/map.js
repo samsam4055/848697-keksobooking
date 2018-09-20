@@ -37,7 +37,7 @@ var gerGroupNonRepetitionOfArray = function (inputArray) {
   var outputArray = [];
   var cloneArray = inputArray.slice();
   for (var i = 0; i < getRandomOfRangeNumbers(1, inputArray.length); i++) {
-    outputArray.push(cloneArray.splice(getRandomOfRangeNumbers(0, cloneArray.length - 1), 1));
+    outputArray.push(cloneArray.splice(getRandomOfRangeNumbers(0, cloneArray.length - 1), 1).toString());
   }
   return outputArray;
 };
@@ -132,40 +132,33 @@ var showCard = function (arr) {
 
       var cardFeatures = cloneCard.querySelector('.popup__features');
       var cardFeature = cardFeatures.querySelectorAll('.popup__feature');
-      if (arr[j].offer.features.length > 0) {
 
-        for (var l = 0; l < cardFeature.length; l++) {
-          for (var k = 0; k < arr[j].offer.features.length; k++) {
+      if (arr[j].offer.features.length > 0) {
+        for (var n = 0; n < cardFeature.length; n++) {
+          cardFeature[n].classList.add('visually-hidden');
+        }
+        for (var k = 0; k < cardFeature.length; k++) {
+          for (var l = 0; l < arr[j].offer.features.length; l++) {
             if (FEATURES[k] === arr[j].offer.features[l]) {
-              if (cardFeature[l].classList.contains('visually-hidden')) {
-                cardFeature[l].classList.remove('visually-hidden');
-              }
-              break;
-            } else {
-              if (!cardFeature[l].classList.contains('visually-hidden')) {
-                cardFeature[l].classList.add('visually-hidden');
-              }
+              cardFeature[k].classList.remove('visually-hidden');
             }
           }
-
         }
       } else {
         cardFeatures.classList.add('hidden');
       }
-      // cardFeature[0].classList.add('visually-hidden');
-      // console.log(arr[j].offer.features);
 
       var cardDescription = cloneCard.querySelector('.popup__description');
       cardDescription.textContent = arr[j].offer.description;
 
       var cardPhotos = cloneCard.querySelector('.popup__photos');
       var cardPhoto = cardPhotos.querySelector('.popup__photo');
-      for (var k = 0; k < arr[j].offer.photos.length; k++) {
-        if (k === 0) {
-          cardPhoto.src = arr[j].offer.photos[k];
+      for (var m = 0; m < arr[j].offer.photos.length; m++) {
+        if (m === 0) {
+          cardPhoto.src = arr[j].offer.photos[m];
         } else {
           var cloneCardPhoto = document.importNode(cardPhoto, true);
-          cloneCardPhoto.src = arr[j].offer.photos[k];
+          cloneCardPhoto.src = arr[j].offer.photos[m];
           cardPhotos.appendChild(cloneCardPhoto);
         }
       }
