@@ -104,10 +104,11 @@ var renderPinAdsOnPage = function (data) {
   return adsArray;
 };
 
-var adsArray = renderPinAdsOnPage(adsData);
+// var adsArray = renderPinAdsOnPage(adsData);
 
 
 var createCardAds = function (inputAdsArray) {
+  var mapClass = document.querySelector('.map');
   var mapFilters = document.querySelector('.map__filters-container');
   var fragmentCard = document.createDocumentFragment();
   var templateCard = document.querySelector('#card');
@@ -173,12 +174,13 @@ var createCardAds = function (inputAdsArray) {
   mapClass.insertBefore(fragmentCard, mapFilters);
 };
 
+// На последний пин вешаю статус активности
+// var pinActive = document.querySelector('.map__pin:last-of-type');
+// pinActive.classList.add('map__pin--active');
 
-var pinActive = document.querySelector('.map__pin:last-of-type');
-pinActive.classList.add('map__pin--active');
+// Активирую карту
+// var mapClass = document.querySelector('.map');
+// mapClass.classList.remove('map--faded');
 
-
-var mapClass = document.querySelector('.map');
-mapClass.classList.remove('map--faded');
-
-createCardAds(adsArray);
+// Создаю popup card
+// createCardAds(adsArray);
