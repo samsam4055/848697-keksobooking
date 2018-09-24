@@ -184,3 +184,23 @@ var createCardAds = function (inputAdsArray) {
 
 // Создаю popup card
 // createCardAds(adsArray);
+
+var disabledFormElements = function (disabledForm) {
+  var adForm = document.querySelector('.ad-form');
+  var fieldsetElements = adForm.querySelectorAll('.ad-form__element');
+  if (!disabledForm) {
+    adForm.classList.remove('ad-form--disabled');
+  } else {
+    adForm.classList.add('ad-form--disabled');
+  }
+
+  for (var i = 0; i < fieldsetElements.length; i++) {
+    if (!disabledForm) {
+      fieldsetElements[i].disabled = false;
+    } else {
+      fieldsetElements[i].disabled = true;
+    }
+  }
+};
+
+disabledFormElements(true);
