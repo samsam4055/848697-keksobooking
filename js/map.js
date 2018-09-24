@@ -104,8 +104,6 @@ var renderPinAdsOnPage = function (data) {
   return adsArray;
 };
 
-// var adsArray = renderPinAdsOnPage(adsData);
-
 
 var createCardAds = function (inputAdsArray) {
   var mapClass = document.querySelector('.map');
@@ -174,6 +172,9 @@ var createCardAds = function (inputAdsArray) {
   mapClass.insertBefore(fragmentCard, mapFilters);
 };
 
+// Заполняю массив сгенерированными объявлениями
+// var adsArray = renderPinAdsOnPage(adsData);
+
 // На последний пин вешаю статус активности
 // var pinActive = document.querySelector('.map__pin:last-of-type');
 // pinActive.classList.add('map__pin--active');
@@ -188,10 +189,13 @@ var createCardAds = function (inputAdsArray) {
 var disabledFormElements = function (disabledForm) {
   var adForm = document.querySelector('.ad-form');
   var fieldsetElements = adForm.querySelectorAll('.ad-form__element');
+  var mapClass = document.querySelector('.map');
   if (!disabledForm) {
     adForm.classList.remove('ad-form--disabled');
+    mapClass.classList.remove('map--faded');
   } else {
     adForm.classList.add('ad-form--disabled');
+    mapClass.classList.add('map--faded');
   }
 
   for (var i = 0; i < fieldsetElements.length; i++) {
@@ -202,5 +206,13 @@ var disabledFormElements = function (disabledForm) {
     }
   }
 };
-
 disabledFormElements(true);
+
+var onClickMainPin = function () {
+  var mainPin = document.querySelector('.map__pin--main');
+  disabledFormElements(false);
+  mainPin.removeEventListener('mouseup', onClickMainPin);
+};
+
+var mainPin = document.querySelector('.map__pin--main');
+mainPin.addEventListener('mouseup', onClickMainPin);
