@@ -172,23 +172,10 @@ var createCardAds = function (inputAdsArray) {
   mapClass.insertBefore(fragmentCard, mapFilters);
 };
 
-// Заполняю массив сгенерированными объявлениями
-// var adsArray = renderPinAdsOnPage(adsData);
-
-// На последний пин вешаю статус активности
-// var pinActive = document.querySelector('.map__pin:last-of-type');
-// pinActive.classList.add('map__pin--active');
-
-// Активирую карту
-// var mapClass = document.querySelector('.map');
-// mapClass.classList.remove('map--faded');
-
-// Создаю popup card
-// createCardAds(adsArray);
 
 var disabledFormElements = function (disabledForm) {
   var adForm = document.querySelector('.ad-form');
-  var fieldsetElements = adForm.querySelectorAll('.ad-form__element');
+  var fieldsetElements = adForm.querySelectorAll('fieldset');
   var mapClass = document.querySelector('.map');
   if (!disabledForm) {
     adForm.classList.remove('ad-form--disabled');
@@ -208,11 +195,21 @@ var disabledFormElements = function (disabledForm) {
 };
 disabledFormElements(true);
 
+
 var onClickMainPin = function () {
   var mainPin = document.querySelector('.map__pin--main');
-  disabledFormElements(false);
   mainPin.removeEventListener('mouseup', onClickMainPin);
+  disabledFormElements(false);
+  window.adsArray = renderPinAdsOnPage(adsData);
 };
 
 var mainPin = document.querySelector('.map__pin--main');
 mainPin.addEventListener('mouseup', onClickMainPin);
+
+
+// На последний пин вешаю статус активности
+// var pinActive = document.querySelector('.map__pin:last-of-type');
+// pinActive.classList.add('map__pin--active');
+
+// Создаю popup card
+// createCardAds(adsArray);
