@@ -1,5 +1,9 @@
 'use strict';
 
+var KEY_CODE_ESCAPE = 27;
+var MAIN_PIN_HEIGHT = 81;
+var MAIN_PIN_WIDTH = 65;
+
 var adsData = {
   avatarNames: ['01', '02', '03', '04', '05', '06', '07', '08'],
   offerTitles: ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'],
@@ -104,10 +108,27 @@ var renderPinAdsOnPage = function (data) {
   return adsArray;
 };
 
-var adsArray = renderPinAdsOnPage(adsData);
 
+var closeCard = function (notRemoveClassActivePin) {
+  var mapCard = document.querySelector('.map__card');
+  if (mapCard) {
+    mapCard.remove();
+  }
+  if (!notRemoveClassActivePin) {
+    var currentActivePin = document.querySelector('.map__pin--active');
+    currentActivePin.classList.remove('map__pin--active');
+  }
+};
+
+var onCardClose = function (evt) {
+  if (evt.keyCode === KEY_CODE_ESCAPE) {
+    document.removeEventListener('keydown', onCardClose);
+    closeCard();
+  }
+};
 
 var createCardAds = function (inputAdsArray) {
+  var mapClass = document.querySelector('.map');
   var mapFilters = document.querySelector('.map__filters-container');
   var fragmentCard = document.createDocumentFragment();
   var templateCard = document.querySelector('#card');
@@ -171,14 +192,74 @@ var createCardAds = function (inputAdsArray) {
   fragmentCard.appendChild(cloneCard);
 
   mapClass.insertBefore(fragmentCard, mapFilters);
+
+  var popucClose = document.querySelector('.popup__close');
+  popucClose.addEventListener('mouseup', function () {
+    closeCard();
+  });
+
+  document.addEventListener('keydown', onCardClose);
 };
 
 
-var pinActive = document.querySelector('.map__pin:last-of-type');
-pinActive.classList.add('map__pin--active');
+var disabledFormElements = function (disabledForm) {
+  var adForm = document.querySelector('.ad-form');
+  var fieldsetElements = adForm.querySelectorAll('fieldset');
+  var mapClass = document.querySelector('.map');
+  if (!disabledForm) {
+    adForm.classList.remove('ad-form--disabled');
+    mapClass.classList.remove('map--faded');
+  } else {
+    adForm.classList.add('ad-form--disabled');
+    mapClass.classList.add('map--faded');
+  }
 
+  for (var i = 0; i < fieldsetElements.length; i++) {
+    if (!disabledForm) {
+      fieldsetElements[i].disabled = false;
+    } else {
+      fieldsetElements[i].disabled = true;
+    }
+  }
+};
+disabledFormElements(true);
 
-var mapClass = document.querySelector('.map');
-mapClass.classList.remove('map--faded');
+var onClickPin = function (evt) {
+  var currentActivePin = document.querySelector('.map__pin--active');
+  if (currentActivePin) {
+    currentActivePin.classList.remove('map__pin--active');
+  }
+  closeCard(true);
+  evt.currentTarget.classList.add('map__pin--active');
+  createCardAds(window.adsArray);
+};
 
-createCardAds(adsArray);
+var onClickMainPin = function () {
+  var addressInput = document.querySelector('#address');
+  var mainPin = document.querySelector('.map__pin--main');
+  mainPin.removeEventListener('mouseup', onClickMainPin);
+  disabledFormElements(false);
+  window.adsArray = renderPinAdsOnPage(adsData);
+
+  var mapPins = document.querySelector('.map__pins');
+  var mapPin = mapPins.querySelectorAll('.map__pin');
+  for (var i = 0; i < mapPin.length; i++) {
+    mapPin[i].addEventListener('mouseup', function (evt) {
+      if (!evt.currentTarget.classList.contains('map__pin--main')) {
+        onClickPin(evt);
+      }
+    });
+  }
+
+  addressInput.value = (parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2)) + ', ' + ((parseInt(mainPin.style.top, 10)) + MAIN_PIN_HEIGHT);
+};
+
+var autoStart = function () {
+  var mainPin = document.querySelector('.map__pin--main');
+  mainPin.addEventListener('mouseup', onClickMainPin);
+
+  var addressInput = document.querySelector('#address');
+  addressInput.setAttribute('readonly', '');
+  addressInput.value = (parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2)) + ', ' + ((parseInt(mainPin.style.top, 10)) + (MAIN_PIN_HEIGHT / 2));
+};
+autoStart();
