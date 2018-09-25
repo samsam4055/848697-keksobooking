@@ -118,8 +118,8 @@ var closeCard = function (notRemoveClassActivePin) {
   }
 };
 
-var onCardClose = function () {
-  if (event.keyCode === KEY_CODE_ESCAPE) {
+var onCardClose = function (evt) {
+  if (evt.keyCode === KEY_CODE_ESCAPE) {
     document.removeEventListener('keydown', onCardClose);
     closeCard();
   }
