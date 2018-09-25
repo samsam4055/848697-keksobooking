@@ -1,5 +1,7 @@
 'use strict';
 
+var KEY_CODE_ENTER = 13;
+
 var adsData = {
   avatarNames: ['01', '02', '03', '04', '05', '06', '07', '08'],
   offerTitles: ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'],
@@ -105,6 +107,19 @@ var renderPinAdsOnPage = function (data) {
 };
 
 
+var closeCard = function (notRemoveClassActivePin) {
+  var mapCard = document.querySelector('.map__card');
+  if (mapCard) {
+    mapCard.remove();
+  }
+  if (!notRemoveClassActivePin) {
+    var currentActivePin = document.querySelector('.map__pin--active');
+    currentActivePin.classList.remove('map__pin--active');
+  }
+
+};
+
+
 var createCardAds = function (inputAdsArray) {
   var mapClass = document.querySelector('.map');
   var mapFilters = document.querySelector('.map__filters-container');
@@ -170,6 +185,17 @@ var createCardAds = function (inputAdsArray) {
   fragmentCard.appendChild(cloneCard);
 
   mapClass.insertBefore(fragmentCard, mapFilters);
+
+  var popucClose = document.querySelector('.popup__close');
+  popucClose.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === KEY_CODE_ENTER) {
+      closeCard();
+    }
+  });
+  popucClose.addEventListener('mouseup', function () {
+    closeCard();
+  });
+
 };
 
 
@@ -195,21 +221,49 @@ var disabledFormElements = function (disabledForm) {
 };
 disabledFormElements(true);
 
+var onClickPin = function (evt) {
+  var currentActivePin = document.querySelector('.map__pin--active');
+  if (currentActivePin) {
+    currentActivePin.classList.remove('map__pin--active');
+  }
+  closeCard(true);
+  evt.currentTarget.classList.add('map__pin--active');
+  createCardAds(window.adsArray);
+};
 
 var onClickMainPin = function () {
+  var addressInput = document.querySelector('#address');
   var mainPin = document.querySelector('.map__pin--main');
   mainPin.removeEventListener('mouseup', onClickMainPin);
   disabledFormElements(false);
   window.adsArray = renderPinAdsOnPage(adsData);
+
+  var mapPins = document.querySelector('.map__pins');
+  var mapPin = mapPins.querySelectorAll('.map__pin');
+  for (var i = 0; i < mapPin.length; i++) {
+    mapPin[i].addEventListener('mouseup', function (evt) {
+      if (!evt.currentTarget.classList.contains('map__pin--main')) {
+        onClickPin(evt);
+      }
+    });
+  }
+  var mainPinStyle = getComputedStyle(mainPin);
+  addressInput.value = (parseInt(mainPin.style.left, 10) + (parseInt(mainPinStyle.width, 10) / 2)) + ', ' + (parseInt(mainPin.style.top, 10) + (parseInt(mainPinStyle.height, 10)));
 };
 
-var mainPin = document.querySelector('.map__pin--main');
-mainPin.addEventListener('mouseup', onClickMainPin);
+var autoStart = function () {
+  var mainPin = document.querySelector('.map__pin--main');
+  mainPin.addEventListener('mouseup', onClickMainPin);
+
+  var addressInput = document.querySelector('#address');
+  addressInput.setAttribute('readonly', ''); // addressInput.readonly = true; — почему-то несрабатывал
+  var mainPinStyle = getComputedStyle(mainPin);
+  addressInput.value = (parseInt(mainPin.style.left, 10) + (parseInt(mainPinStyle.width, 10) / 2)) + ', ' + (parseInt(mainPin.style.top, 10) + (parseInt(mainPinStyle.height, 10) / 2));
+};
+autoStart();
 
 
 // На последний пин вешаю статус активности
-// var pinActive = document.querySelector('.map__pin:last-of-type');
-// pinActive.classList.add('map__pin--active');
 
 // Создаю popup card
 // createCardAds(adsArray);
