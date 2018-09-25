@@ -1,6 +1,8 @@
 'use strict';
 
 var KEY_CODE_ESCAPE = 27;
+var MAIN_PIN_HEIGHT = 81;
+var MAIN_PIN_WIDTH = 65;
 
 var adsData = {
   avatarNames: ['01', '02', '03', '04', '05', '06', '07', '08'],
@@ -233,11 +235,8 @@ var onClickPin = function (evt) {
 };
 
 var onClickMainPin = function () {
-  var MAIN_PIN_TAIL_HEIGHT = 22;
   var addressInput = document.querySelector('#address');
   var mainPin = document.querySelector('.map__pin--main');
-  var mainPinImg = mainPin.querySelector('img');
-  var mainPinImgStyle = getComputedStyle(mainPinImg);
   mainPin.removeEventListener('mouseup', onClickMainPin);
   disabledFormElements(false);
   window.adsArray = renderPinAdsOnPage(adsData);
@@ -252,20 +251,7 @@ var onClickMainPin = function () {
     });
   }
 
-  addressInput.value =
-    (parseInt(mainPin.style.left, 10) +
-      (parseInt(mainPinImgStyle.width, 10) / 2)
-    )
-    + ', ' +
-    (
-      (parseInt(mainPin.style.top, 10)) +
-      (parseInt(mainPinImgStyle.borderTopWidth, 10)) +
-      (parseInt(mainPinImgStyle.paddingTop, 10)) +
-      (parseInt(mainPinImgStyle.height, 10)) +
-      (parseInt(mainPinImgStyle.paddingBottom, 10)) +
-      (parseInt(mainPinImgStyle.borderBottomWidth, 10)) +
-      MAIN_PIN_TAIL_HEIGHT
-    );
+  addressInput.value = (parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2)) + ', ' + ((parseInt(mainPin.style.top, 10)) + MAIN_PIN_HEIGHT);
 };
 
 var autoStart = function () {
@@ -273,8 +259,7 @@ var autoStart = function () {
   mainPin.addEventListener('mouseup', onClickMainPin);
 
   var addressInput = document.querySelector('#address');
-  addressInput.setAttribute('readonly', ''); // addressInput.readonly = true; — почему-то несрабатывал
-  var mainPinStyle = getComputedStyle(mainPin);
-  addressInput.value = (parseInt(mainPin.style.left, 10) + (parseInt(mainPinStyle.width, 10) / 2)) + ', ' + (parseInt(mainPin.style.top, 10) + (parseInt(mainPinStyle.height, 10) / 2));
+  addressInput.setAttribute('readonly', '');
+  addressInput.value = (parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2)) + ', ' + ((parseInt(mainPin.style.top, 10)) + (MAIN_PIN_HEIGHT / 2));
 };
 autoStart();
