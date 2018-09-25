@@ -1,6 +1,6 @@
 'use strict';
 
-var KEY_CODE_ENTER = 13;
+var KEY_CODE_ESCAPE = 27;
 
 var adsData = {
   avatarNames: ['01', '02', '03', '04', '05', '06', '07', '08'],
@@ -116,9 +116,14 @@ var closeCard = function (notRemoveClassActivePin) {
     var currentActivePin = document.querySelector('.map__pin--active');
     currentActivePin.classList.remove('map__pin--active');
   }
-
 };
 
+var onCardClose = function () {
+  if (event.keyCode === KEY_CODE_ESCAPE) {
+    document.removeEventListener('keydown', onCardClose);
+    closeCard();
+  }
+};
 
 var createCardAds = function (inputAdsArray) {
   var mapClass = document.querySelector('.map');
@@ -187,15 +192,11 @@ var createCardAds = function (inputAdsArray) {
   mapClass.insertBefore(fragmentCard, mapFilters);
 
   var popucClose = document.querySelector('.popup__close');
-  popucClose.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === KEY_CODE_ENTER) {
-      closeCard();
-    }
-  });
   popucClose.addEventListener('mouseup', function () {
     closeCard();
   });
 
+  document.addEventListener('keydown', onCardClose);
 };
 
 
@@ -232,8 +233,11 @@ var onClickPin = function (evt) {
 };
 
 var onClickMainPin = function () {
+  var MAIN_PIN_TAIL_HEIGHT = 22;
   var addressInput = document.querySelector('#address');
   var mainPin = document.querySelector('.map__pin--main');
+  var mainPinImg = mainPin.querySelector('img');
+  var mainPinImgStyle = getComputedStyle(mainPinImg);
   mainPin.removeEventListener('mouseup', onClickMainPin);
   disabledFormElements(false);
   window.adsArray = renderPinAdsOnPage(adsData);
@@ -247,8 +251,21 @@ var onClickMainPin = function () {
       }
     });
   }
-  var mainPinStyle = getComputedStyle(mainPin);
-  addressInput.value = (parseInt(mainPin.style.left, 10) + (parseInt(mainPinStyle.width, 10) / 2)) + ', ' + (parseInt(mainPin.style.top, 10) + (parseInt(mainPinStyle.height, 10)));
+
+  addressInput.value =
+    (parseInt(mainPin.style.left, 10) +
+      (parseInt(mainPinImgStyle.width, 10) / 2)
+    )
+    + ', ' +
+    (
+      (parseInt(mainPin.style.top, 10)) +
+      (parseInt(mainPinImgStyle.borderTopWidth, 10)) +
+      (parseInt(mainPinImgStyle.paddingTop, 10)) +
+      (parseInt(mainPinImgStyle.height, 10)) +
+      (parseInt(mainPinImgStyle.paddingBottom, 10)) +
+      (parseInt(mainPinImgStyle.borderBottomWidth, 10)) +
+      MAIN_PIN_TAIL_HEIGHT
+    );
 };
 
 var autoStart = function () {
@@ -261,9 +278,3 @@ var autoStart = function () {
   addressInput.value = (parseInt(mainPin.style.left, 10) + (parseInt(mainPinStyle.width, 10) / 2)) + ', ' + (parseInt(mainPin.style.top, 10) + (parseInt(mainPinStyle.height, 10) / 2));
 };
 autoStart();
-
-
-// На последний пин вешаю статус активности
-
-// Создаю popup card
-// createCardAds(adsArray);
