@@ -21,6 +21,27 @@ var typePrices = {
 
 var adForm = document.querySelector('.ad-form');
 
+var temporaryFormInfo = {
+  type: adForm.querySelector('#type').value,
+  roomNumber: adForm.querySelector('#room_number').value,
+  capacity: adForm.querySelector('#capacity').value,
+  timein: adForm.querySelector('#timein').value,
+  timeout: adForm.querySelector('#timeout').value
+};
+
+var resetPage = function () {
+  var mapPins = document.querySelector('.map__pins');
+  var mapPin = mapPins.querySelectorAll('.map__pin');
+  mapPin.forEach(function (item) {
+    if (!item.classList.contains('map__pin--main')) {
+      item.remove();
+    }
+  });
+  window.disabledFormElements(true);
+  window.autoStart();
+
+};
+
 var onFormElementValidation = function (evt, element) {
   evt = evt === 'not-event' ? element : evt.target;
   if (evt.checkValidity()) {
@@ -45,9 +66,14 @@ var onFormCapacityValidation = function () {
   var formCapacityOptions = formCapacity.querySelectorAll('option');
   formCapacityOptions.forEach(function (item) {
     if (item.selected) {
-      item.validity.valid = false;
+      if (item.disabled) {
+        formCapacity.setCustomValidity('Выберете другое количество мест');
+        formCapacity.style.boxShadow = '0 0 0 4px #ff6d51';
+      } else {
+        formCapacity.setCustomValidity('');
+        formCapacity.style.boxShadow = 'none';
+      }
     }
-
   });
 };
 
@@ -77,38 +103,128 @@ var onFormRoomChange = function (validation) {
   }
 };
 
-
 var setFormConstraints = function () {
   var formTitle = adForm.querySelector('#title');
   var formPrice = adForm.querySelector('#price');
   var formType = adForm.querySelector('#type');
   var formRoom = adForm.querySelector('#room_number');
+  var formCapacity = adForm.querySelector('#capacity');
 
   formTitle.required = true;
-  formTitle.setAttribute('min', 30);
-  formTitle.setAttribute('max', 100);
-  formTitle.addEventListener('keyup', onFormElementValidation);
-  formTitle.addEventListener('blur', onFormElementValidation);
+  formTitle.setAttribute('minlength', 30);
+  formTitle.setAttribute('maxlength', 100);
+  formTitle.addEventListener('input', onFormElementValidation);
 
   formPrice.required = true;
   formPrice.setAttribute('min', 0);
   formPrice.setAttribute('max', 1000000);
-  formPrice.addEventListener('keyup', onFormElementValidation);
-  formPrice.addEventListener('blur', onFormElementValidation);
-  formPrice.addEventListener('click', onFormElementValidation);
+  formPrice.addEventListener('input', onFormElementValidation);
 
   formType.addEventListener('change', onFormTypeChange);
 
   formRoom.addEventListener('change', onFormRoomChange);
+
+  formCapacity.addEventListener('change', onFormCapacityValidation);
   onFormTypeChange('withoutValidation');
   onFormRoomChange('withoutValidation');
 };
 setFormConstraints();
 
+var onCloseSuccess = function (evt) {
+  if ((evt.keyCode === window.KeyCode.ESCAPE) || (evt.type === 'click')) {
+    document.removeEventListener('keydown', onCloseSuccess, true);
+    document.removeEventListener('click', onCloseSuccess, true);
+    var elementSuccess = document.querySelector('.success');
+    elementSuccess.remove();
+    resetPage();
+  }
+};
+
+var onCloseError = function (evt) {
+  if ((evt.keyCode === window.KeyCode.ESCAPE) || ((evt.type === 'click') && (evt.target.classList.contains('error__button')))) {
+    document.removeEventListener('keydown', onCloseError, true);
+    var elementError = document.querySelector('.error');
+    elementError.remove();
+    resetPage();
+  }
+};
+
+var showResult = function (result) {
+  if ((result === 'success') || (result === 'error')) {
+    var mainOnPage = document.querySelector('main');
+    var fragmentResult = document.createDocumentFragment();
+    var templateResult = document.querySelector('#' + result);
+    var cloneResult = document.importNode(templateResult.content, true);
+    fragmentResult.appendChild(cloneResult);
+    mainOnPage.appendChild(fragmentResult);
+
+    if (result === 'success') {
+      document.addEventListener('keydown', onCloseSuccess, true);
+      document.addEventListener('click', onCloseSuccess, true);
+    } else {
+      var mainErrorClass = mainOnPage.querySelector('.error');
+      document.addEventListener('keydown', onCloseError, true);
+      mainErrorClass.addEventListener('click', onCloseError);
+    }
+  }
+};
+
+
+var onReset = function (evt) {
+  if (evt) {
+    evt.preventDefault();
+  }
+  var formTitle = adForm.querySelector('#title');
+  var formPrice = adForm.querySelector('#price');
+  var formType = adForm.querySelector('#type');
+  var formRoom = adForm.querySelector('#room_number');
+  var formCapacity = adForm.querySelector('#capacity');
+  var formAvatarFile = adForm.querySelector('.ad-form-header__input');
+  var formPhotoFile = adForm.querySelector('.ad-form__input');
+  var formDescription = adForm.querySelector('#description');
+  var formfeature = adForm.querySelector('.features');
+  var formElementInput = formfeature.querySelectorAll('input');
+  var formTimein = adForm.querySelector('#timein');
+  var formTimeout = adForm.querySelector('#timeout');
+
+  formType.value = temporaryFormInfo.type;
+  formRoom.value = temporaryFormInfo.roomNumber;
+  formPrice.value = '';
+  formCapacity.value = temporaryFormInfo.capacity;
+  formTimein.value = temporaryFormInfo.timein;
+  formTimeout.value = temporaryFormInfo.timeout;
+  formTitle.value = '';
+  formAvatarFile.value = '';
+  formPhotoFile.value = '';
+  formDescription.value = '';
+  formElementInput.forEach(function (item) {
+    item.checked = false;
+  });
+  onFormTypeChange('withoutValidation');
+};
 
 var onSubmit = function (evt) {
   evt.preventDefault();
+  evt.target.blur();
+
+  var formTitle = adForm.querySelector('#title');
+  var formPrice = adForm.querySelector('#price');
+  var formCapacity = adForm.querySelector('#capacity');
+
+  if (formTitle.validity.valid && formPrice.validity.valid && formCapacity.validity.valid) {
+    showResult('success');
+    onReset();
+  } else {
+    onFormTypeChange();
+    onFormRoomChange();
+    onFormElementValidation('not-event', formTitle);
+  }
 };
 
-var buttonSubmit = adForm.querySelector('.ad-form__submit');
-buttonSubmit.addEventListener('click', onSubmit);
+var addButtonAction = function () {
+  var buttonReset = adForm.querySelector('.ad-form__reset');
+  var buttonSubmit = adForm.querySelector('.ad-form__submit');
+  buttonReset.addEventListener('click', onReset);
+  buttonSubmit.addEventListener('click', onSubmit);
+};
+addButtonAction();
