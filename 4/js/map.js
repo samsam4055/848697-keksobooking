@@ -273,7 +273,7 @@ var onClickMainPin = function () {
     });
   }
 
-  addressInput.value = (parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2)) + ', ' + ((parseInt(mainPin.style.top, 10)) + MAIN_PIN_HEIGHT);
+  addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2))) + ', ' + Math.round(((parseInt(mainPin.style.top, 10)) + MAIN_PIN_HEIGHT));
 };
 
 window.autoStart = function () {
@@ -282,6 +282,6 @@ window.autoStart = function () {
 
   var addressInput = document.querySelector('#address');
   addressInput.setAttribute('readonly', '');
-  addressInput.value = (parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2)) + ', ' + ((parseInt(mainPin.style.top, 10)) + (MAIN_PIN_HEIGHT / 2));
+  addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2))) + ', ' + (Math.round((parseInt(mainPin.style.top, 10)) + (MAIN_PIN_HEIGHT / 2)));
 };
 window.autoStart();
