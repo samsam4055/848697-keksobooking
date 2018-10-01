@@ -104,7 +104,6 @@ var onFormRoomChange = function (validation) {
 };
 
 var onSelectTimeChacge = function (evt) {
-  // evt.target.id === 'timein'
   var selectTimein = adForm.querySelector('#timein');
   var selectTimeout = adForm.querySelector('#timeout');
   if (selectTimein === evt.target) {
