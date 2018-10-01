@@ -23,8 +23,8 @@ var adForm = document.querySelector('.ad-form');
 
 var temporaryFormInfo = {
   type: adForm.querySelector('#type').value,
-  roomNumber: adForm.querySelector('#room_number').value,
-  capacity: adForm.querySelector('#capacity').value,
+  roomNumber: 1,
+  capacity: 1,
   timein: adForm.querySelector('#timein').value,
   timeout: adForm.querySelector('#timeout').value
 };
@@ -123,6 +123,9 @@ var setFormConstraints = function () {
   var selectTimein = adForm.querySelector('#timein');
   var selectTimeout = adForm.querySelector('#timeout');
 
+  formRoom.value = temporaryFormInfo.roomNumber;
+  formCapacity.value = temporaryFormInfo.capacity;
+
   formTitle.required = true;
   formTitle.setAttribute('minlength', 30);
   formTitle.setAttribute('maxlength', 100);
@@ -199,6 +202,10 @@ var onReset = function (evt) {
   var formElementInput = formfeature.querySelectorAll('input');
   var formTimein = adForm.querySelector('#timein');
   var formTimeout = adForm.querySelector('#timeout');
+
+  formTitle.style.border = '1px solid #d9d9d3';
+  formPrice.style.border = '1px solid #d9d9d3';
+  formCapacity.style.boxShadow = 'none';
 
   formType.value = temporaryFormInfo.type;
   formRoom.value = temporaryFormInfo.roomNumber;
