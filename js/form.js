@@ -103,12 +103,26 @@ var onFormRoomChange = function (validation) {
   }
 };
 
+var onSelectTimeChacge = function (evt) {
+  // evt.target.id === 'timein'
+  var selectTimein = adForm.querySelector('#timein');
+  var selectTimeout = adForm.querySelector('#timeout');
+  if (selectTimein === evt.target) {
+    selectTimeout.value = selectTimein.value;
+  } else {
+    selectTimein.value = selectTimeout.value;
+  }
+
+};
+
 var setFormConstraints = function () {
   var formTitle = adForm.querySelector('#title');
   var formPrice = adForm.querySelector('#price');
   var formType = adForm.querySelector('#type');
   var formRoom = adForm.querySelector('#room_number');
   var formCapacity = adForm.querySelector('#capacity');
+  var selectTimein = adForm.querySelector('#timein');
+  var selectTimeout = adForm.querySelector('#timeout');
 
   formTitle.required = true;
   formTitle.setAttribute('minlength', 30);
@@ -121,10 +135,10 @@ var setFormConstraints = function () {
   formPrice.addEventListener('input', onFormElementValidation);
 
   formType.addEventListener('change', onFormTypeChange);
-
   formRoom.addEventListener('change', onFormRoomChange);
-
   formCapacity.addEventListener('change', onFormCapacityValidation);
+  selectTimein.addEventListener('change', onSelectTimeChacge);
+  selectTimeout.addEventListener('change', onSelectTimeChacge);
   onFormTypeChange('withoutValidation');
   onFormRoomChange('withoutValidation');
 };
@@ -201,6 +215,7 @@ var onReset = function (evt) {
     item.checked = false;
   });
   onFormTypeChange('withoutValidation');
+  resetPage();
 };
 
 var onSubmit = function (evt) {
@@ -226,5 +241,6 @@ var addButtonAction = function () {
   var buttonSubmit = adForm.querySelector('.ad-form__submit');
   buttonReset.addEventListener('click', onReset);
   buttonSubmit.addEventListener('click', onSubmit);
+
 };
 addButtonAction();
