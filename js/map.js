@@ -5,8 +5,15 @@ window.KeyCode = {
   ESCAPE: 27
 };
 
-var MAIN_PIN_HEIGHT = 81;
-var MAIN_PIN_WIDTH = 65;
+var MainPin = {
+  MIN_X: 100,
+  MAX_X: 1000,
+  MIN_Y: 130,
+  MAX_Y: 630,
+  MAIN_PIN_HEIGHT: 81,
+  MAIN_PIN_WIDTH: 65,
+  idle: 10
+};
 
 var temporaryVariables = {
   clones: {
@@ -18,10 +25,10 @@ var temporaryVariables = {
 var adsData = {
   avatarNames: ['01', '02', '03', '04', '05', '06', '07', '08'],
   offerTitles: ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'],
-  locationMinX: 100,
-  locationMinY: 130,
-  locationMaxX: 1000,
-  locationMaxY: 630,
+  locationMinX: MainPin.MIN_X,
+  locationMinY: MainPin.MIN_Y,
+  locationMaxX: MainPin.MAX_X,
+  locationMaxY: MainPin.MAX_Y,
   priceMin: 1000,
   priceMax: 1000000,
   types: {
@@ -256,12 +263,49 @@ var onClickPin = function (evt) {
   createCardAds(window.adsArray);
 };
 
+var onDragMainPin = function (evt) {
+  evt.preventDefault();
+  var mainPin = document.querySelector('.map__pin--main');
+  var startDrag = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+  var dragged = false;
+
+  var onMoveMainPin = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: startDrag.x - moveEvt.clientX,
+      y: startDrag.y - moveEvt.clientY
+    };
+    startDrag = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+    mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+  };
+
+  var onDropMainPin = function (dropEvt) {
+    dropEvt.preventDefault();
+    document.removeEventListener('mousemove', onMoveMainPin);
+    document.removeEventListener('mouseup', onDropMainPin);
+
+  };
+  document.addEventListener('mousemove', onMoveMainPin);
+  document.addEventListener('mouseup', onDropMainPin);
+};
+
 var onClickMainPin = function () {
+  var map = document.querySelector('.map');
   var addressInput = document.querySelector('#address');
   var mainPin = document.querySelector('.map__pin--main');
-  mainPin.removeEventListener('mouseup', onClickMainPin);
-  window.disabledFormElements(false);
-  window.adsArray = renderPinAdsOnPage(adsData);
+  // mainPin.removeEventListener('mouseup', onClickMainPin);
+  if (map.classList.contains('map--faded')) {
+    window.disabledFormElements(false);
+    window.adsArray = renderPinAdsOnPage(adsData);
+  }
 
   var mapPins = document.querySelector('.map__pins');
   var mapPin = mapPins.querySelectorAll('.map__pin');
@@ -273,15 +317,16 @@ var onClickMainPin = function () {
     });
   }
 
-  addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2))) + ', ' + Math.round(((parseInt(mainPin.style.top, 10)) + MAIN_PIN_HEIGHT));
+  addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (MainPin.MAIN_PIN_WIDTH / 2))) + ', ' + Math.round(((parseInt(mainPin.style.top, 10)) + MainPin.MAIN_PIN_HEIGHT));
 };
 
 window.autoStart = function () {
   var mainPin = document.querySelector('.map__pin--main');
+  mainPin.addEventListener('mousedown', onDragMainPin);
   mainPin.addEventListener('mouseup', onClickMainPin);
 
   var addressInput = document.querySelector('#address');
   addressInput.setAttribute('readonly', '');
-  addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2))) + ', ' + (Math.round((parseInt(mainPin.style.top, 10)) + (MAIN_PIN_HEIGHT / 2)));
+  addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (MainPin.MAIN_PIN_WIDTH / 2))) + ', ' + (Math.round((parseInt(mainPin.style.top, 10)) + (MainPin.MAIN_PIN_HEIGHT / 2)));
 };
 window.autoStart();
