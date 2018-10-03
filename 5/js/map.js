@@ -6,8 +6,8 @@ window.KeyCode = {
 };
 
 var MainPin = {
-  MIN_X: 100,
-  MAX_X: 1000,
+  MIN_X: 0,
+  MAX_X: 1200,
   MIN_Y: 130,
   MAX_Y: 630,
   HEIGHT: 81,
@@ -30,7 +30,6 @@ var MainPin = {
   var mainPin = document.querySelector('.map__pin--main');
   MainPin.defaultX = mainPin.style.left;
   MainPin.defaultY = mainPin.style.top;
-  MainPin.MIN_X += MainPin.WIDTH;
   MainPin.MAX_X -= MainPin.WIDTH;
 })();
 
@@ -322,23 +321,26 @@ var onMouseDownMainPin = function (evt) {
     document.removeEventListener('mousemove', onMoveMainPin);
     document.removeEventListener('mouseup', onMouseUpMainPin);
 
+    var map = document.querySelector('.map');
+    if (map.classList.contains('map--faded')) {
+      window.disabledFormElements(false);
+      window.adsArray = renderPinAdsOnPage(adsData);
+      mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (MainPin.HEIGHT / 2))) + 'px';
+    }
+
+    var mapPins = document.querySelector('.map__pins');
+    var mapPin = mapPins.querySelectorAll('.map__pin');
+    for (var i = 0; i < mapPin.length; i++) {
+      mapPin[i].addEventListener('mouseup', function (evtPin) {
+        if (!evtPin.currentTarget.classList.contains('map__pin--main')) {
+          onClickPin(evtPin);
+        }
+      });
+    }
+
     MainPin.getCoordinateMainPin();
   };
-  var map = document.querySelector('.map');
-  if (map.classList.contains('map--faded')) {
-    window.disabledFormElements(false);
-    window.adsArray = renderPinAdsOnPage(adsData);
-  }
 
-  var mapPins = document.querySelector('.map__pins');
-  var mapPin = mapPins.querySelectorAll('.map__pin');
-  for (var i = 0; i < mapPin.length; i++) {
-    mapPin[i].addEventListener('mouseup', function (evtPin) {
-      if (!evtPin.currentTarget.classList.contains('map__pin--main')) {
-        onClickPin(evtPin);
-      }
-    });
-  }
 
   document.addEventListener('mousemove', onMoveMainPin);
   document.addEventListener('mouseup', onMouseUpMainPin);
