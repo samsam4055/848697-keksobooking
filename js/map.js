@@ -30,6 +30,8 @@ var MainPin = {
   var mainPin = document.querySelector('.map__pin--main');
   MainPin.defaultX = mainPin.style.left;
   MainPin.defaultY = mainPin.style.top;
+  MainPin.MIN_X += MainPin.WIDTH;
+  MainPin.MAX_X -= MainPin.WIDTH;
 })();
 
 var temporaryVariables = {
