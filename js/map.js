@@ -1,45 +1,12 @@
 'use strict';
 
-window.KeyCode = {
-  ENTER: 13,
-  ESCAPE: 27
-};
-
-var MainPin = {
-  MIN_X: 0,
-  MAX_X: 1200,
-  MIN_Y: 130,
-  MAX_Y: 630,
-  HEIGHT: 81,
-  WIDTH: 65,
-  defaultX: 0,
-  defaultY: 0,
-  getCoordinateMainPin: function () {
-    var mainPin = document.querySelector('.map__pin--main');
-    var addressInput = document.querySelector('#address');
-    addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (this.WIDTH / 2))) + ', ' + Math.round(((parseInt(mainPin.style.top, 10)) + this.HEIGHT));
-  },
-  getCoordinateMainPinCenter: function () {
-    var mainPin = document.querySelector('.map__pin--main');
-    var addressInput = document.querySelector('#address');
-    addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (this.WIDTH / 2))) + ', ' + (Math.round((parseInt(mainPin.style.top, 10)) + (this.HEIGHT / 2)));
-  },
-};
-
-(function () {
-  var mainPin = document.querySelector('.map__pin--main');
-  MainPin.defaultX = mainPin.style.left;
-  MainPin.defaultY = mainPin.style.top;
-  MainPin.MAX_X -= MainPin.WIDTH;
-})();
-
 var adsData = {
   avatarNames: ['01', '02', '03', '04', '05', '06', '07', '08'],
   offerTitles: ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'],
-  locationMinX: MainPin.MIN_X,
-  locationMinY: MainPin.MIN_Y,
-  locationMaxX: MainPin.MAX_X,
-  locationMaxY: MainPin.MAX_Y,
+  locationMinX: window.MainPin.MIN_X,
+  locationMinY: window.MainPin.MIN_Y,
+  locationMaxX: window.MainPin.MAX_X,
+  locationMaxY: window.MainPin.MAX_Y,
   priceMin: 1000,
   priceMax: 1000000,
   types: {
@@ -118,7 +85,7 @@ var onClickPin = function (evt) {
   window.createCardAds(window.adsArray);
 };
 
-var onMouseDownMainPin = function (evt) {
+window.onMouseDownMainPin = function (evt) {
   evt.preventDefault();
   var mainPin = document.querySelector('.map__pin--main');
   var startDrag = {
@@ -138,15 +105,15 @@ var onMouseDownMainPin = function (evt) {
     };
     var newY = mainPin.offsetTop - shift.y;
     var newX = mainPin.offsetLeft - shift.x;
-    if (newX < MainPin.MIN_X) {
-      newX = MainPin.MIN_X;
-    } else if (newX > MainPin.MAX_X) {
-      newX = MainPin.MAX_X;
+    if (newX < window.MainPin.MIN_X) {
+      newX = window.MainPin.MIN_X;
+    } else if (newX > window.MainPin.MAX_X) {
+      newX = window.MainPin.MAX_X;
     }
-    if (newY < MainPin.MIN_Y) {
-      newY = MainPin.MIN_Y;
-    } else if (newY > MainPin.MAX_Y) {
-      newY = MainPin.MAX_Y;
+    if (newY < window.MainPin.MIN_Y) {
+      newY = window.MainPin.MIN_Y;
+    } else if (newY > window.MainPin.MAX_Y) {
+      newY = window.MainPin.MAX_Y;
     }
     mainPin.style.top = newY + 'px';
     mainPin.style.left = newX + 'px';
@@ -162,7 +129,7 @@ var onMouseDownMainPin = function (evt) {
     if (map.classList.contains('map--faded')) {
       window.disabledFormElements(false);
       window.adsArray = window.renderPinAdsOnPage(adsData);
-      mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (MainPin.HEIGHT / 2))) + 'px';
+      mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (window.MainPin.HEIGHT / 2))) + 'px';
     }
 
     var mapPins = document.querySelector('.map__pins');
@@ -175,21 +142,10 @@ var onMouseDownMainPin = function (evt) {
       });
     }
 
-    MainPin.getCoordinateMainPin();
+    window.MainPin.getCoordinateMainPin();
   };
 
 
   document.addEventListener('mousemove', onMoveMainPin);
   document.addEventListener('mouseup', onMouseUpMainPin);
 };
-
-window.autoStart = function () {
-  var mainPin = document.querySelector('.map__pin--main');
-  mainPin.style.left = MainPin.defaultX;
-  mainPin.style.top = MainPin.defaultY;
-  mainPin.addEventListener('mousedown', onMouseDownMainPin);
-  var addressInput = document.querySelector('#address');
-  addressInput.setAttribute('readonly', '');
-  MainPin.getCoordinateMainPinCenter();
-};
-window.autoStart();
