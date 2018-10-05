@@ -1,12 +1,17 @@
 'use strict';
+(function () {
 
-window.autoStart = function () {
-  var mainPin = document.querySelector('.map__pin--main');
-  mainPin.style.left = window.MainPin.defaultX;
-  mainPin.style.top = window.MainPin.defaultY;
-  mainPin.addEventListener('mousedown', window.onMouseDownMainPin);
-  var addressInput = document.querySelector('#address');
-  addressInput.setAttribute('readonly', '');
-  window.MainPin.getCoordinateMainPinCenter();
-};
-window.autoStart();
+  var autoStart = function () {
+    var mainPin = document.querySelector('.map__pin--main');
+    mainPin.style.left = window.variable.MainPin.defaultX;
+    mainPin.style.top = window.variable.MainPin.defaultY;
+    mainPin.addEventListener('mousedown', window.map.onMouseDownMainPin);
+    var addressInput = document.querySelector('#address');
+    addressInput.setAttribute('readonly', '');
+    window.variable.MainPin.getCoordinateMainPinCenter();
+  };
+  autoStart();
+  window.run = {
+    autoStart: autoStart
+  };
+})();
