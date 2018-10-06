@@ -14,9 +14,7 @@
 
   var load = function (onSuccess, onError, FormData) {
     var xhr = new XMLHttpRequest();
-
     xhr.responseType = 'json';
-
     xhr.addEventListener('load', function () {
       switch (xhr.status) {
         case HttpStatus.OK:
