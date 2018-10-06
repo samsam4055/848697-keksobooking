@@ -255,8 +255,8 @@
     var formCapacity = adForm.querySelector('#capacity');
 
     if (formTitle.validity.valid && formPrice.validity.valid && formCapacity.validity.valid) {
-      // var form = document.querySelector('.ad-form');
-      window.backend.send(evt.target);
+      var formData = new FormData(evt.target);
+      window.backend.send(formData);
       onReset();
     } else {
       onFormTypeChange();
