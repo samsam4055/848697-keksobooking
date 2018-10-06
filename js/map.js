@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+
+  /*
   var adsArray;
   var adsData = {
     avatarNames: ['01', '02', '03', '04', '05', '06', '07', '08'],
@@ -29,7 +31,7 @@
       height: 70
     }
   };
-
+*/
 
   var getRandomNumbers = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -54,16 +56,6 @@
   };
 
   window.form.disabled(true);
-
-  var onClickPin = function (evt) {
-    var currentActivePin = document.querySelector('.map__pin--active');
-    if (currentActivePin) {
-      currentActivePin.classList.remove('map__pin--active');
-    }
-    window.card.close(true);
-    evt.currentTarget.classList.add('map__pin--active');
-    window.card.create(adsArray);
-  };
 
   var onMouseDownMainPin = function (evt) {
     evt.preventDefault();
@@ -108,18 +100,13 @@
       var map = document.querySelector('.map');
       if (map.classList.contains('map--faded')) {
         window.form.disabled(false);
-        adsArray = window.pin.render(adsData);
-        mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (window.variable.MainPin.HEIGHT / 2))) + 'px';
-      }
 
-      var mapPins = document.querySelector('.map__pins');
-      var mapPin = mapPins.querySelectorAll('.map__pin');
-      for (var i = 0; i < mapPin.length; i++) {
-        mapPin[i].addEventListener('mouseup', function (evtPin) {
-          if (!evtPin.currentTarget.classList.contains('map__pin--main')) {
-            onClickPin(evtPin);
-          }
-        });
+        window.backend.loadedCheck = true;
+        if (window.backend.resultData) {
+          window.pin.render(window.backend.resultData);
+        }
+
+        mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (window.variable.MainPin.HEIGHT / 2))) + 'px';
       }
 
       window.variable.MainPin.getCoordinateMainPin();

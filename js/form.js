@@ -250,13 +250,13 @@
   var onSubmit = function (evt) {
     evt.preventDefault();
     evt.target.blur();
-
     var formTitle = adForm.querySelector('#title');
     var formPrice = adForm.querySelector('#price');
     var formCapacity = adForm.querySelector('#capacity');
 
     if (formTitle.validity.valid && formPrice.validity.valid && formCapacity.validity.valid) {
-      showResult('success');
+      // var form = document.querySelector('.ad-form');
+      window.backend.send(evt.target);
       onReset();
     } else {
       onFormTypeChange();
@@ -267,14 +267,14 @@
 
   var addButtonAction = function () {
     var buttonReset = adForm.querySelector('.ad-form__reset');
-    var buttonSubmit = adForm.querySelector('.ad-form__submit');
+    // var buttonSubmit = adForm.querySelector('.ad-form__submit');
     buttonReset.addEventListener('click', onReset);
-    buttonSubmit.addEventListener('click', onSubmit);
+    adForm.addEventListener('submit', onSubmit);
 
   };
   addButtonAction();
   window.form = {
-    disabled: disabledFormElements
-
+    disabled: disabledFormElements,
+    showResult: showResult
   };
 })();
