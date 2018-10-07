@@ -66,7 +66,7 @@
   };
 
   var onError = function (error) {
-    window.form.showResult('error');
+    window.form.showResult('error', error);
     throw error;
   };
 
