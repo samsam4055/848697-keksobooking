@@ -56,10 +56,8 @@
   var onLoad = function (data) {
     if (data instanceof Array) {
       window.backend.resultData = data;
-      if (window.backend.loadedCheck) {
-        window.backend.loadedCheck = true;
-        window.pin.render(window.backend.resultData);
-      }
+      window.pin.render(window.backend.resultData);
+
     } else {
       window.form.showResult('success');
     }
