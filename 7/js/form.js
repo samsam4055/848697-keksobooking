@@ -188,23 +188,32 @@
     }
   };
 
-  var showResult = function (result) {
-    if ((result === 'success') || (result === 'error')) {
-      var mainOnPage = document.querySelector('main');
-      var fragmentResult = document.createDocumentFragment();
-      var templateResult = document.querySelector('#' + result);
-      var cloneResult = document.importNode(templateResult.content, true);
+  var showResult = function (result, error) {
+    var mainOnPage = document.querySelector('main');
+    var fragmentResult = document.createDocumentFragment();
+    var templateResult;
+    var cloneResult;
+
+    if (result === 'success') {
+      templateResult = document.querySelector('#success');
+      cloneResult = document.importNode(templateResult.content, true);
       fragmentResult.appendChild(cloneResult);
       mainOnPage.appendChild(fragmentResult);
 
-      if (result === 'success') {
-        document.addEventListener('keydown', onCloseSuccess, true);
-        document.addEventListener('click', onCloseSuccess, true);
-      } else {
-        var mainErrorClass = mainOnPage.querySelector('.error');
-        document.addEventListener('keydown', onCloseError, true);
-        mainErrorClass.addEventListener('click', onCloseError);
-      }
+      document.addEventListener('keydown', onCloseSuccess, true);
+      document.addEventListener('click', onCloseSuccess, true);
+
+    } else if (result === 'error') {
+      templateResult = document.querySelector('#error');
+      cloneResult = document.importNode(templateResult.content, true);
+      var messageError = cloneResult.querySelector('.error__message');
+      messageError.innerHTML += '<br>' + (error ? error : '');
+      fragmentResult.appendChild(cloneResult);
+      mainOnPage.appendChild(fragmentResult);
+
+      var mainErrorClass = mainOnPage.querySelector('.error');
+      document.addEventListener('keydown', onCloseError, true);
+      mainErrorClass.addEventListener('click', onCloseError);
     }
   };
 
@@ -255,7 +264,7 @@
     var formCapacity = adForm.querySelector('#capacity');
 
     if (formTitle.validity.valid && formPrice.validity.valid && formCapacity.validity.valid) {
-      var formData = new FormData(evt.target);
+      var formData = new FormData(adForm);
       window.backend.send(formData);
       onReset();
     } else {
@@ -267,9 +276,9 @@
 
   var addButtonAction = function () {
     var buttonReset = adForm.querySelector('.ad-form__reset');
-    // var buttonSubmit = adForm.querySelector('.ad-form__submit');
+    var buttonSubmit = adForm.querySelector('.ad-form__submit');
     buttonReset.addEventListener('click', onReset);
-    adForm.addEventListener('submit', onSubmit);
+    buttonSubmit.addEventListener('click', onSubmit);
 
   };
   addButtonAction();
