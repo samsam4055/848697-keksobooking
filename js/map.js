@@ -1,35 +1,5 @@
 'use strict';
 (function () {
-  var adsArray;
-  var adsData = {
-    avatarNames: ['01', '02', '03', '04', '05', '06', '07', '08'],
-    offerTitles: ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'],
-    locationMinX: window.variable.MainPin.MIN_X,
-    locationMinY: window.variable.MainPin.MIN_Y,
-    locationMaxX: window.variable.MainPin.MAX_X,
-    locationMaxY: window.variable.MainPin.MAX_Y,
-    priceMin: 1000,
-    priceMax: 1000000,
-    types: {
-      palace: 'Дворец',
-      flat: 'Квартира',
-      house: 'Дом',
-      bungalo: 'Бунгало'
-    },
-    roomsMin: 1,
-    roomsMax: 5,
-    guestsMax: 5,
-    checkIn: ['12:00', '13:00', '14:00'],
-    checkOut: ['12:00', '13:00', '14:00'],
-    features: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
-    photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'],
-    qtyAds: 8,
-    pinSize: {
-      width: 50,
-      height: 70
-    }
-  };
-
 
   var getRandomNumbers = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -54,16 +24,6 @@
   };
 
   window.form.disabled(true);
-
-  var onClickPin = function (evt) {
-    var currentActivePin = document.querySelector('.map__pin--active');
-    if (currentActivePin) {
-      currentActivePin.classList.remove('map__pin--active');
-    }
-    window.card.close(true);
-    evt.currentTarget.classList.add('map__pin--active');
-    window.card.create(adsArray);
-  };
 
   var onMouseDownMainPin = function (evt) {
     evt.preventDefault();
@@ -108,18 +68,9 @@
       var map = document.querySelector('.map');
       if (map.classList.contains('map--faded')) {
         window.form.disabled(false);
-        adsArray = window.pin.render(adsData);
-        mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (window.variable.MainPin.HEIGHT / 2))) + 'px';
-      }
+        window.backend.request(window.form.getLoad, window.form.showError);
 
-      var mapPins = document.querySelector('.map__pins');
-      var mapPin = mapPins.querySelectorAll('.map__pin');
-      for (var i = 0; i < mapPin.length; i++) {
-        mapPin[i].addEventListener('mouseup', function (evtPin) {
-          if (!evtPin.currentTarget.classList.contains('map__pin--main')) {
-            onClickPin(evtPin);
-          }
-        });
+        mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (window.variable.MainPin.HEIGHT / 2))) + 'px';
       }
 
       window.variable.MainPin.getCoordinateMainPin();

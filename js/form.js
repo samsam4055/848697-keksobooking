@@ -188,23 +188,32 @@
     }
   };
 
-  var showResult = function (result) {
-    if ((result === 'success') || (result === 'error')) {
-      var mainOnPage = document.querySelector('main');
-      var fragmentResult = document.createDocumentFragment();
-      var templateResult = document.querySelector('#' + result);
-      var cloneResult = document.importNode(templateResult.content, true);
+  var showResult = function (error) {
+    var mainOnPage = document.querySelector('main');
+    var fragmentResult = document.createDocumentFragment();
+    var templateResult;
+    var cloneResult;
+
+    if (!error) {
+      templateResult = document.querySelector('#success');
+      cloneResult = document.importNode(templateResult.content, true);
       fragmentResult.appendChild(cloneResult);
       mainOnPage.appendChild(fragmentResult);
 
-      if (result === 'success') {
-        document.addEventListener('keydown', onCloseSuccess, true);
-        document.addEventListener('click', onCloseSuccess, true);
-      } else {
-        var mainErrorClass = mainOnPage.querySelector('.error');
-        document.addEventListener('keydown', onCloseError, true);
-        mainErrorClass.addEventListener('click', onCloseError);
-      }
+      document.addEventListener('keydown', onCloseSuccess, true);
+      document.addEventListener('click', onCloseSuccess, true);
+
+    } else {
+      templateResult = document.querySelector('#error');
+      cloneResult = document.importNode(templateResult.content, true);
+      var messageError = cloneResult.querySelector('.error__message');
+      messageError.innerHTML += '<br>' + error;
+      fragmentResult.appendChild(cloneResult);
+      mainOnPage.appendChild(fragmentResult);
+
+      var mainErrorClass = mainOnPage.querySelector('.error');
+      document.addEventListener('keydown', onCloseError, true);
+      mainErrorClass.addEventListener('click', onCloseError);
     }
   };
 
@@ -247,16 +256,29 @@
     resetPage();
   };
 
+  var onLoad = function (data) {
+    window.backend.resultData = data;
+    window.pin.render(window.backend.resultData);
+  };
+
+  var onSuccess = function () {
+    showResult();
+  };
+
+  var onError = function (error) {
+    showResult(error);
+  };
+
   var onSubmit = function (evt) {
     evt.preventDefault();
     evt.target.blur();
-
     var formTitle = adForm.querySelector('#title');
     var formPrice = adForm.querySelector('#price');
     var formCapacity = adForm.querySelector('#capacity');
 
     if (formTitle.validity.valid && formPrice.validity.valid && formCapacity.validity.valid) {
-      showResult('success');
+      var formData = new FormData(adForm);
+      window.backend.request(onSuccess, onError, formData);
       onReset();
     } else {
       onFormTypeChange();
@@ -273,8 +295,13 @@
 
   };
   addButtonAction();
-  window.form = {
-    disabled: disabledFormElements
 
+
+  window.form = {
+    disabled: disabledFormElements,
+    showResult: showResult,
+    getLoad: onLoad,
+    showSuccess: onSuccess,
+    showError: onError
   };
 })();

@@ -71,13 +71,17 @@
 
         var cardPhotos = cloneCard.querySelector('.popup__photos');
         var cardPhoto = cardPhotos.querySelector('.popup__photo');
-        for (var m = 0; m < inputAdsArray[j].offer.photos.length; m++) {
-          if (m === 0) {
-            cardPhoto.src = inputAdsArray[j].offer.photos[m];
-          } else {
-            var cloneCardPhoto = document.importNode(cardPhoto, true);
-            cloneCardPhoto.src = inputAdsArray[j].offer.photos[m];
-            cardPhotos.appendChild(cloneCardPhoto);
+        if (inputAdsArray[j].offer.photos.length === 0) {
+          cardPhoto.remove();
+        } else {
+          for (var m = 0; m < inputAdsArray[j].offer.photos.length; m++) {
+            if (m === 0) {
+              cardPhoto.src = inputAdsArray[j].offer.photos[m];
+            } else {
+              var cloneCardPhoto = document.importNode(cardPhoto, true);
+              cloneCardPhoto.src = inputAdsArray[j].offer.photos[m];
+              cardPhotos.appendChild(cloneCardPhoto);
+            }
           }
         }
       }
