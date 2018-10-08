@@ -100,7 +100,8 @@
       var map = document.querySelector('.map');
       if (map.classList.contains('map--faded')) {
         window.form.disabled(false);
-        window.backend.load();
+        // window.backend.load();
+        window.backend.request(window.form.getLoad, window.form.showError);
 
         mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (window.variable.MainPin.HEIGHT / 2))) + 'px';
       }

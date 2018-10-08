@@ -256,6 +256,19 @@
     resetPage();
   };
 
+  var onLoad = function (data) {
+    window.backend.resultData = data;
+    window.pin.render(window.backend.resultData);
+  };
+
+  var onSuccess = function () {
+    showResult('success');
+  };
+
+  var onError = function (error) {
+    showResult('error', error);
+  };
+
   var onSubmit = function (evt) {
     evt.preventDefault();
     evt.target.blur();
@@ -265,7 +278,7 @@
 
     if (formTitle.validity.valid && formPrice.validity.valid && formCapacity.validity.valid) {
       var formData = new FormData(adForm);
-      window.backend.send(formData);
+      window.backend.request(onSuccess, onError, formData);
       onReset();
     } else {
       onFormTypeChange();
@@ -282,8 +295,13 @@
 
   };
   addButtonAction();
+
+
   window.form = {
     disabled: disabledFormElements,
-    showResult: showResult
+    showResult: showResult,
+    getLoad: onLoad,
+    showSuccess: onSuccess,
+    showError: onError
   };
 })();

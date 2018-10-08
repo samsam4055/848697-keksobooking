@@ -9,6 +9,7 @@
     PAGE_NOT_FOUND: 404,
     INTERNAL_SERVER_ERROR: 500
   };
+  var REQUEST_TIME_OUT = 10000;
   var DATA_URL = 'https://js.dump.academy/keksobooking/data';
   var SEND_URL = 'https://js.dump.academy/keksobooking';
 
@@ -42,7 +43,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = REQUEST_TIME_OUT;
 
     if (FormData === undefined) {
       xhr.open('GET', DATA_URL);
@@ -53,32 +54,7 @@
     }
   };
 
-  var onLoad = function (data) {
-    if (data instanceof Array) {
-      window.backend.resultData = data;
-      window.pin.render(window.backend.resultData);
-
-    } else {
-      window.form.showResult('success');
-    }
-  };
-
-  var onError = function (error) {
-    window.form.showResult('error', error);
-    throw error;
-  };
-
-  var getData = function () {
-    load(onLoad, onError);
-  };
-
-
-  var sendForm = function (form) {
-    load(onLoad, onError, form);
-  };
-
   window.backend = {
-    load: getData,
-    send: sendForm
+    request: load
   };
 })();
