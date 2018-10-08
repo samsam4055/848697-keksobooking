@@ -188,13 +188,13 @@
     }
   };
 
-  var showResult = function (result, error) {
+  var showResult = function (error) {
     var mainOnPage = document.querySelector('main');
     var fragmentResult = document.createDocumentFragment();
     var templateResult;
     var cloneResult;
 
-    if (result === 'success') {
+    if (!error) {
       templateResult = document.querySelector('#success');
       cloneResult = document.importNode(templateResult.content, true);
       fragmentResult.appendChild(cloneResult);
@@ -203,11 +203,11 @@
       document.addEventListener('keydown', onCloseSuccess, true);
       document.addEventListener('click', onCloseSuccess, true);
 
-    } else if (result === 'error') {
+    } else {
       templateResult = document.querySelector('#error');
       cloneResult = document.importNode(templateResult.content, true);
       var messageError = cloneResult.querySelector('.error__message');
-      messageError.innerHTML += '<br>' + (error ? error : '');
+      messageError.innerHTML += '<br>' + error;
       fragmentResult.appendChild(cloneResult);
       mainOnPage.appendChild(fragmentResult);
 
@@ -256,6 +256,19 @@
     resetPage();
   };
 
+  var onLoad = function (data) {
+    window.backend.resultData = data;
+    window.pin.render(window.backend.resultData);
+  };
+
+  var onSuccess = function () {
+    showResult();
+  };
+
+  var onError = function (error) {
+    showResult(error);
+  };
+
   var onSubmit = function (evt) {
     evt.preventDefault();
     evt.target.blur();
@@ -265,7 +278,7 @@
 
     if (formTitle.validity.valid && formPrice.validity.valid && formCapacity.validity.valid) {
       var formData = new FormData(adForm);
-      window.backend.send(formData);
+      window.backend.request(onSuccess, onError, formData);
       onReset();
     } else {
       onFormTypeChange();
@@ -282,8 +295,13 @@
 
   };
   addButtonAction();
+
+
   window.form = {
     disabled: disabledFormElements,
-    showResult: showResult
+    showResult: showResult,
+    getLoad: onLoad,
+    showSuccess: onSuccess,
+    showError: onError
   };
 })();

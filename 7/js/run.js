@@ -10,8 +10,6 @@
     addressInput.setAttribute('readonly', '');
     window.variable.MainPin.getCoordinateMainPinCenter();
     window.backend.resultData = undefined;
-    window.backend.loadedCheck = undefined;
-    window.backend.load();
   };
   autoStart();
   window.run = {
