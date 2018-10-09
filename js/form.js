@@ -259,6 +259,7 @@
   var onLoad = function (data) {
     window.backend.resultData = data;
     window.pin.render(window.backend.resultData);
+    window.filter.disable(false);
   };
 
   var onSuccess = function () {
