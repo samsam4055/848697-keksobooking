@@ -6,7 +6,7 @@
     ESCAPE: 27
   };
 
-  var maxPinOnMap = 5;
+  var maxPinOnMap = 15;
 
   var MainPin = {
     MIN_X: 0,

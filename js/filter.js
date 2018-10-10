@@ -5,7 +5,7 @@
   var DEBOUNCE_INTERVAL = 500;
   var PRICE = {
     low: 10000,
-    height: 50000
+    high: 50000
   };
 
   var lastTimeout = null;
@@ -42,49 +42,46 @@
     };
 
     var checkingSelect = function (element, property) {
+
       if (property !== 'price') {
-        // проверяю select'ы кроме price
         return similarAds.filter(function (offerData) {
-          if (offerData.offer[property].toString() === element.value) {
-            console.log(offerData.offer[property].toString());
-          }
           return offerData.offer[property].toString() === element.value;
         });
+
       } else {
-        // тут проверяю price
+
         return similarAds.filter(function (offerData) {
           var priceFilterValues = {
-            'middle': offerData.offer.price >= PRICE.low && offerData.offer.price < PRICE.high,
+            'middle': (offerData.offer.price >= PRICE.low) && (offerData.offer.price < PRICE.high),
             'low': offerData.offer.price < PRICE.low,
             'high': offerData.offer.price >= PRICE.high
           };
-          if (priceFilterValues[element.value]) {
-            console.log(element.value);
-          }
           return priceFilterValues[element.value];
         });
       }
     };
     var checkingFeature = function (item) {
-      // тут проверка выбранных feature
+      return similarAds.filter(function (offerData) {
+        return offerData.offer.features.indexOf(item.value) >= 0;
+      });
     };
 
     if (mapFilterSelect.length !== 0) {
       mapFilterSelect.forEach(function (item) {
         if (item.value !== 'any') {
-          checkingSelect(item, filtredElement[item.id]);
+          similarAds = checkingSelect(item, filtredElement[item.id]);
         }
       });
     }
 
     if (mapFilterFeatures.length !== 0) {
       mapFilterFeatures.forEach(function (item) {
-
-        checkingFeature(item);
+        similarAds = checkingFeature(item);
       });
     }
-    console.log(similarAds);
-    window.pin.render(similarAds);
+    if (similarAds.length) {
+      window.pin.render(similarAds);
+    }
   };
 
   mapFilters.addEventListener('change', function () {
@@ -92,13 +89,6 @@
     window.card.close();
     debounce(onChangeFilter);
   });
-
-  var qwe = [1, 2, 3, 4, 5, 1, 23, 4, 5, 6, 7, 8, 9, 0];
-  console.log(qwe);
-  qwe.filter(function (item) {
-    return item > 4;
-  });
-  console.log(qwe);
 
   window.filter = {
     disable: disableForm
