@@ -53,13 +53,7 @@
   };
 
   var resetPage = function () {
-    var mapPins = document.querySelector('.map__pins');
-    var mapPin = mapPins.querySelectorAll('.map__pin');
-    mapPin.forEach(function (item) {
-      if (!item.classList.contains('map__pin--main')) {
-        item.remove();
-      }
-    });
+    window.pin.remove();
     disabledFormElements(true);
     window.run.autoStart();
 
