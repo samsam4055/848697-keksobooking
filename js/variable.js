@@ -6,6 +6,8 @@
     ESCAPE: 27
   };
 
+  var maxPinOnMap = 5;
+
   var MainPin = {
     MIN_X: 0,
     MAX_X: 1200,
@@ -35,6 +37,7 @@
   })();
   window.variable = {
     KeyCode: KeyCode,
-    MainPin: MainPin
+    MainPin: MainPin,
+    maxPinOnMap: maxPinOnMap
   };
 })();
