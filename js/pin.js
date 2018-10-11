@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var MAX_PINON_MAP = 5;
 
   var removePins = function () {
     var mapPins = document.querySelector('.map__pins');
@@ -28,7 +29,7 @@
     var templatePin = document.querySelector('#pin');
 
     data.forEach(function (item, i) {
-      if (i < window.variable.maxPinOnMap) {
+      if (i < MAX_PINON_MAP) {
         adsArray.push(item);
         var clonePin = document.importNode(templatePin.content, true);
         var pinButton = clonePin.querySelector('button');
