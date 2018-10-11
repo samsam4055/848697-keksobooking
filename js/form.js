@@ -39,7 +39,6 @@
         fieldsetElements[i].disabled = true;
       }
     }
-    window.card.close();
   };
 
   var adForm = document.querySelector('.ad-form');
@@ -163,23 +162,39 @@
   };
   setFormConstraints();
 
-  var onCloseSuccess = function (evt) {
+  var closeSuccess = function (evt) {
     if ((evt.keyCode === window.variable.KeyCode.ESCAPE) || (evt.type === 'click')) {
-      document.removeEventListener('keydown', onCloseSuccess, true);
-      document.removeEventListener('click', onCloseSuccess, true);
-      var elementSuccess = document.querySelector('.success');
-      elementSuccess.remove();
+      document.removeEventListener('keydown', onKeydownCloseSuccess, true);
+      document.removeEventListener('click', onCkickCloseSuccess, true);
+      var messageSuccess = document.querySelector('.success');
+      messageSuccess.remove();
       resetPage();
     }
   };
 
-  var onCloseError = function (evt) {
+  var onCkickCloseSuccess = function (evt) {
+    closeSuccess(evt);
+  };
+
+  var onKeydownCloseSuccess = function (evt) {
+    closeSuccess(evt);
+  };
+
+  var closeError = function (evt) {
     if ((evt.keyCode === window.variable.KeyCode.ESCAPE) || ((evt.type === 'click') && (evt.target.classList.contains('error__button')))) {
-      document.removeEventListener('keydown', onCloseError, true);
-      var elementError = document.querySelector('.error');
-      elementError.remove();
+      document.removeEventListener('keydown', onKeydownCloseError, true);
+      var messageError = document.querySelector('.error');
+      messageError.remove();
       resetPage();
     }
+  };
+
+  var onClickCloseError = function (evt) {
+    closeError(evt);
+  };
+
+  var onKeydownCloseError = function (evt) {
+    closeError(evt);
   };
 
   var showResult = function (error) {
@@ -194,20 +209,21 @@
       fragmentResult.appendChild(cloneResult);
       mainOnPage.appendChild(fragmentResult);
 
-      document.addEventListener('keydown', onCloseSuccess, true);
-      document.addEventListener('click', onCloseSuccess, true);
+      document.addEventListener('keydown', onKeydownCloseSuccess, true);
+      document.addEventListener('click', onCkickCloseSuccess, true);
 
     } else {
+      var messageError = cloneResult.querySelector('.error__message');
+      var mainErrorClass = mainOnPage.querySelector('.error');
+
       templateResult = document.querySelector('#error');
       cloneResult = document.importNode(templateResult.content, true);
-      var messageError = cloneResult.querySelector('.error__message');
       messageError.innerHTML += '<br>' + error;
       fragmentResult.appendChild(cloneResult);
       mainOnPage.appendChild(fragmentResult);
 
-      var mainErrorClass = mainOnPage.querySelector('.error');
-      document.addEventListener('keydown', onCloseError, true);
-      mainErrorClass.addEventListener('click', onCloseError);
+      document.addEventListener('keydown', onKeydownCloseError, true);
+      mainErrorClass.addEventListener('click', onClickCloseError);
     }
   };
 

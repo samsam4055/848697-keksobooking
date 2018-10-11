@@ -13,6 +13,7 @@
     addressInput.setAttribute('readonly', '');
     window.variable.MainPin.getCoordinateMainPinCenter();
     window.backend.resultData = undefined;
+    window.card.close();
   };
   autoStart();
   window.run = {

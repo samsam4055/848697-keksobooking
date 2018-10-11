@@ -11,9 +11,9 @@
   var lastTimeout = null;
 
   var disableForm = function (bool) {
-    var mapFiltersElement = mapFilters.querySelectorAll('.map__filter, .map__features');
-    if (mapFiltersElement.length !== null) {
-      mapFiltersElement.forEach(function (item) {
+    var mapFilter = mapFilters.querySelectorAll('.map__filter, .map__features');
+    if (mapFilter.length !== null) {
+      mapFilter.forEach(function (item) {
         item.disabled = bool;
       });
     }
