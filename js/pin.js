@@ -41,12 +41,12 @@
       fragmentPin.appendChild(clonePin);
     }
 
-    var onClickPin = function () {
-      activatePin();
+    var onClickPin = function (evt) {
+      activatePin(evt);
     };
 
-    var onKeydownPin = function () {
-      activatePin();
+    var onKeydownPin = function (evt) {
+      activatePin(evt);
     };
 
     pins.appendChild(fragmentPin);
