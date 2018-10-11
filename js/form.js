@@ -95,7 +95,7 @@
     });
   };
 
-  var onFormRoomChange = function (validation) {
+  var onFormRoomChange = function () {
     var formRoom = adForm.querySelector('#room_number');
     var formCapacity = adForm.querySelector('#capacity');
     var formCapacityOptions = formCapacity.querySelectorAll('option');
@@ -116,9 +116,7 @@
       }
     });
 
-    if (validation !== 'withoutValidation') {
-      onFormCapacityValidation();
-    }
+    onFormCapacityValidation();
   };
 
   var onSelectTimeChacge = function (evt) {
@@ -160,7 +158,7 @@
     selectTimein.addEventListener('change', onSelectTimeChacge);
     selectTimeout.addEventListener('change', onSelectTimeChacge);
     onFormTypeChange('withoutValidation');
-    onFormRoomChange('withoutValidation');
+    onFormRoomChange();
   };
   setFormConstraints();
 
@@ -265,6 +263,7 @@
       item.checked = false;
     });
     onFormTypeChange('withoutValidation');
+    onFormRoomChange();
     resetPage();
   };
 

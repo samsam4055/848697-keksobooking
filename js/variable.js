@@ -15,16 +15,11 @@
     WIDTH: 65,
     defaultX: 0,
     defaultY: 0,
-    getCoordinateMainPin: function () {
+    getCoordinateMainPin: function (center) {
       var mainPin = document.querySelector('.map__pin--main');
       var addressInput = document.querySelector('#address');
-      addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (this.WIDTH / 2))) + ', ' + Math.round(((parseInt(mainPin.style.top, 10)) + this.HEIGHT));
-    },
-    getCoordinateMainPinCenter: function () {
-      var mainPin = document.querySelector('.map__pin--main');
-      var addressInput = document.querySelector('#address');
-      addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (this.WIDTH / 2))) + ', ' + (Math.round((parseInt(mainPin.style.top, 10)) + (this.HEIGHT / 2)));
-    },
+      addressInput.value = (Math.round(parseInt(mainPin.style.left, 10) + (this.WIDTH / 2))) + ', ' + Math.round(((parseInt(mainPin.style.top, 10)) + ((center === 'center') ? (this.HEIGHT / 2) : this.HEIGHT)));
+    }
   };
 
   (function () {
