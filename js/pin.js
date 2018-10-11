@@ -49,6 +49,13 @@
           onClickPin(evtPin);
         }
       });
+      mapPin[i].addEventListener('keydown', function (evtPin) {
+        if (evtPin.keyCode === window.variable.KeyCode.ENTER) {
+          if (!evtPin.currentTarget.classList.contains('map__pin--main')) {
+            onClickPin(evtPin);
+          }
+        }
+      });
     }
     return adsArray;
   };
