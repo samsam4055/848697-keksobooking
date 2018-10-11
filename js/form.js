@@ -20,8 +20,6 @@
     }
   };
 
-  var resultData;
-
   var disabledFormElements = function (disabledForm) {
     var adForm = document.querySelector('.ad-form');
     var fieldsetElements = adForm.querySelectorAll('fieldset');
@@ -268,8 +266,8 @@
   };
 
   var onLoad = function (data) {
-    resultData = data;
-    window.pin.render(resultData);
+    window.form.resultData = data;
+    window.pin.render(window.form.resultData);
     window.filter.disable(false);
   };
 
@@ -314,7 +312,6 @@
     showResult: showResult,
     getLoad: onLoad,
     showSuccess: onSuccess,
-    showError: onError,
-    resultData: resultData
+    showError: onError
   };
 })();
