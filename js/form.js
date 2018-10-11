@@ -39,7 +39,6 @@
         fieldsetElements[i].disabled = true;
       }
     }
-    window.card.close();
   };
 
   var adForm = document.querySelector('.ad-form');
