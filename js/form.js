@@ -166,8 +166,8 @@
     if ((evt.keyCode === window.variable.KeyCode.ESCAPE) || (evt.type === 'click')) {
       document.removeEventListener('keydown', onCloseSuccess, true);
       document.removeEventListener('click', onCloseSuccess, true);
-      var elementSuccess = document.querySelector('.success');
-      elementSuccess.remove();
+      var messageSuccess = document.querySelector('.success');
+      messageSuccess.remove();
       resetPage();
     }
   };
@@ -175,8 +175,8 @@
   var onCloseError = function (evt) {
     if ((evt.keyCode === window.variable.KeyCode.ESCAPE) || ((evt.type === 'click') && (evt.target.classList.contains('error__button')))) {
       document.removeEventListener('keydown', onCloseError, true);
-      var elementError = document.querySelector('.error');
-      elementError.remove();
+      var messageError = document.querySelector('.error');
+      messageError.remove();
       resetPage();
     }
   };
