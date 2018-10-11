@@ -12,14 +12,16 @@
     });
   };
 
-  var onClickPin = function (evt) {
-    var currentActivePin = document.querySelector('.map__pin--active');
-    if (currentActivePin) {
-      currentActivePin.classList.remove('map__pin--active');
+  var activatePin = function (evt) {
+    if (!evt.currentTarget.classList.contains('map__pin--main')) {
+      var currentActivePin = document.querySelector('.map__pin--active');
+      if (currentActivePin) {
+        currentActivePin.classList.remove('map__pin--active');
+      }
+      window.card.close(true);
+      evt.currentTarget.classList.add('map__pin--active');
+      window.card.create(window.backend.resultData);
     }
-    window.card.close(true);
-    evt.currentTarget.classList.add('map__pin--active');
-    window.card.create(window.backend.resultData);
   };
 
   var renderPinAdsOnPage = function (data) {
@@ -39,20 +41,24 @@
       fragmentPin.appendChild(clonePin);
     }
 
+    var onClickPin = function () {
+      activatePin();
+    };
+
+    var onKeydownPin = function () {
+      activatePin();
+    };
+
     pins.appendChild(fragmentPin);
     var mapPins = document.querySelector('.map__pins');
     var mapPin = mapPins.querySelectorAll('.map__pin');
     for (var i = 0; i < mapPin.length; i++) {
       mapPin[i].addEventListener('mouseup', function (evtPin) {
-        if (!evtPin.currentTarget.classList.contains('map__pin--main')) {
-          onClickPin(evtPin);
-        }
+        onClickPin(evtPin);
       });
       mapPin[i].addEventListener('keydown', function (evtPin) {
         if (evtPin.keyCode === window.variable.KeyCode.ENTER) {
-          if (!evtPin.currentTarget.classList.contains('map__pin--main')) {
-            onClickPin(evtPin);
-          }
+          onKeydownPin(evtPin);
         }
       });
     }
