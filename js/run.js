@@ -2,9 +2,10 @@
 (function () {
 
   var autoStart = function () {
-    var mainPin = document.querySelector('.map__pin--main');
-    var addressInput = document.querySelector('#address');
-    var mapFilters = document.querySelector('.map__filters');
+    var mainSection = document.querySelector('main');
+    var mainPin = mainSection.querySelector('.map__pin--main');
+    var addressInput = mainSection.querySelector('#address');
+    var mapFilters = mainSection.querySelector('.map__filters');
     mapFilters.reset();
     window.filter.disable(true);
     mainPin.style.left = window.variable.MainPin.defaultX;

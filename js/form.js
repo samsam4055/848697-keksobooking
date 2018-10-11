@@ -20,10 +20,12 @@
     }
   };
 
+  var mainSection = document.querySelector('main');
+  var mapClass = mainSection.querySelector('.map');
+  var adForm = mainSection.querySelector('.ad-form');
+
   var disabledFormElements = function (disabledForm) {
-    var adForm = document.querySelector('.ad-form');
     var fieldsetElements = adForm.querySelectorAll('fieldset');
-    var mapClass = document.querySelector('.map');
     if (!disabledForm) {
       adForm.classList.remove('ad-form--disabled');
       mapClass.classList.remove('map--faded');
@@ -40,8 +42,6 @@
       }
     }
   };
-
-  var adForm = document.querySelector('.ad-form');
 
   var temporaryFormInfo = {
     type: adForm.querySelector('#type').value,
@@ -164,7 +164,7 @@
     if ((evt.keyCode === window.variable.KeyCode.ESCAPE) || (evt.type === 'click')) {
       document.removeEventListener('keydown', onKeydownCloseSuccess, true);
       document.removeEventListener('click', onCkickCloseSuccess, true);
-      var messageSuccess = document.querySelector('.success');
+      var messageSuccess = mainSection.querySelector('.success');
       messageSuccess.remove();
       resetPage();
     }
@@ -181,7 +181,7 @@
   var closeError = function (evt) {
     if ((evt.keyCode === window.variable.KeyCode.ESCAPE) || ((evt.type === 'click') && (evt.target.classList.contains('error__button')))) {
       document.removeEventListener('keydown', onKeydownCloseError, true);
-      var messageError = document.querySelector('.error');
+      var messageError = mainSection.querySelector('.error');
       messageError.remove();
       resetPage();
     }
@@ -196,7 +196,6 @@
   };
 
   var showResult = function (error) {
-    var mainOnPage = document.querySelector('main');
     var fragmentResult = document.createDocumentFragment();
     var templateResult;
     var cloneResult;
@@ -205,20 +204,20 @@
       templateResult = document.querySelector('#success');
       cloneResult = document.importNode(templateResult.content, true);
       fragmentResult.appendChild(cloneResult);
-      mainOnPage.appendChild(fragmentResult);
+      mainSection.appendChild(fragmentResult);
 
       document.addEventListener('keydown', onKeydownCloseSuccess, true);
       document.addEventListener('click', onCkickCloseSuccess, true);
 
     } else {
       var messageError = cloneResult.querySelector('.error__message');
-      var mainErrorClass = mainOnPage.querySelector('.error');
+      var mainErrorClass = mainSection.querySelector('.error');
 
       templateResult = document.querySelector('#error');
       cloneResult = document.importNode(templateResult.content, true);
       messageError.innerHTML += '<br>' + error;
       fragmentResult.appendChild(cloneResult);
-      mainOnPage.appendChild(fragmentResult);
+      mainSection.appendChild(fragmentResult);
 
       document.addEventListener('keydown', onKeydownCloseError, true);
       mainErrorClass.addEventListener('click', onClickCloseError);
