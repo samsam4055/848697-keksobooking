@@ -12,7 +12,7 @@
     mainPin.addEventListener('mousedown', window.map.onMouseDownMainPin);
     addressInput.setAttribute('readonly', '');
     window.variable.MainPin.getCoordinateMainPinCenter();
-    window.backend.resultData = undefined;
+    window.form.resultData = undefined;
     window.card.close();
   };
   autoStart();
