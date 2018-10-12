@@ -55,6 +55,7 @@
 
   var resetPage = function () {
     window.pin.remove();
+    window.form.resultData = undefined;
     disabledFormElements(true);
     window.run.autoStart();
 
