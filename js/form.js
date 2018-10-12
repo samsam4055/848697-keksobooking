@@ -20,6 +20,8 @@
     }
   };
 
+  var resultData;
+
   var mainSection = document.querySelector('main');
   var mapClass = mainSection.querySelector('.map');
   var adForm = mainSection.querySelector('.ad-form');
@@ -199,7 +201,8 @@
     var fragmentResult = document.createDocumentFragment();
     var templateResult;
     var cloneResult;
-
+    var messageError;
+    var mainErrorClass;
     if (!error) {
       templateResult = document.querySelector('#success');
       cloneResult = document.importNode(templateResult.content, true);
@@ -210,11 +213,10 @@
       document.addEventListener('click', onCkickCloseSuccess, true);
 
     } else {
-      var messageError = cloneResult.querySelector('.error__message');
-      var mainErrorClass = mainSection.querySelector('.error');
-
       templateResult = document.querySelector('#error');
       cloneResult = document.importNode(templateResult.content, true);
+      messageError = cloneResult.querySelector('.error__message');
+      mainErrorClass = cloneResult.querySelector('.error');
       messageError.innerHTML += '<br>' + error;
       fragmentResult.appendChild(cloneResult);
       mainSection.appendChild(fragmentResult);
@@ -265,7 +267,7 @@
   };
 
   var onLoad = function (data) {
-    window.form.resultData = data;
+    window.form.resultData = data.slice();
     window.pin.render(window.form.resultData);
     window.filter.disable(false);
   };
@@ -311,6 +313,7 @@
     showResult: showResult,
     getLoad: onLoad,
     showSuccess: onSuccess,
-    showError: onError
+    showError: onError,
+    resultData: resultData
   };
 })();
