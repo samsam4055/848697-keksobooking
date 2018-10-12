@@ -1,13 +1,15 @@
 'use strict';
 (function () {
 
+  var mainSection = document.querySelector('main');
+  var mapClass = mainSection.querySelector('.map');
   var closeCard = function (notRemoveClassActivePin) {
-    var mapCard = document.querySelector('.map__card');
+    var mapCard = mainSection.querySelector('.map__card');
     if (mapCard) {
       mapCard.remove();
     }
     if (!notRemoveClassActivePin) {
-      var currentActivePin = document.querySelector('.map__pin--active');
+      var currentActivePin = mainSection.querySelector('.map__pin--active');
       if (currentActivePin) {
         currentActivePin.classList.remove('map__pin--active');
       }
@@ -22,13 +24,12 @@
   };
 
   var createCardAds = function (inputAdsArray) {
-    var mapClass = document.querySelector('.map');
-    var mapFilters = document.querySelector('.map__filters-container');
+    var mapFilters = mapClass.querySelector('.map__filters-container');
     var fragmentCard = document.createDocumentFragment();
     var templateCard = document.querySelector('#card');
     var cloneCard = document.importNode(templateCard.content, true);
 
-    var activePin = document.querySelector('.map__pin--active');
+    var activePin = mapClass.querySelector('.map__pin--active');
     var activePinAvatar = activePin.querySelector('img');
 
     for (var j = 0; j < inputAdsArray.length; j++) {
@@ -91,7 +92,7 @@
 
     mapClass.insertBefore(fragmentCard, mapFilters);
 
-    var popucClose = document.querySelector('.popup__close');
+    var popucClose = mapClass.querySelector('.popup__close');
     popucClose.addEventListener('mouseup', function () {
       closeCard();
     });

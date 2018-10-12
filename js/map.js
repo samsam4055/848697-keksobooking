@@ -1,6 +1,8 @@
 'use strict';
 (function () {
 
+  var mapClass = document.querySelector('.map');
+
   var getRandomNumbers = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
@@ -27,7 +29,7 @@
 
   var onMouseDownMainPin = function (evt) {
     evt.preventDefault();
-    var mainPin = document.querySelector('.map__pin--main');
+    var mainPin = mapClass.querySelector('.map__pin--main');
     var startDrag = {
       x: evt.clientX,
       y: evt.clientY
@@ -65,8 +67,7 @@
       document.removeEventListener('mousemove', onMoveMainPin);
       document.removeEventListener('mouseup', onMouseUpMainPin);
 
-      var map = document.querySelector('.map');
-      if (map.classList.contains('map--faded')) {
+      if (mapClass.classList.contains('map--faded')) {
         window.form.disabled(false);
         window.backend.request(window.form.getLoad, window.form.showError);
 

@@ -30,7 +30,7 @@
 
 
   var onChangeFilter = function () {
-    var similarAds = window.backend.resultData.slice();
+    var similarAds = window.form.resultData.slice();
     var mapFilterSelect = mapFilters.querySelectorAll('select');
     var mapFilterFeatures = mapFilters.querySelectorAll('input[type=checkbox]:checked');
 
