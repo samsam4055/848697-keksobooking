@@ -30,6 +30,33 @@
   };
 
 
+  var checkingSelect = function (ads, element, property) {
+
+    if (property !== 'price') {
+      return ads.filter(function (offerData) {
+        return offerData.offer[property].toString() === element.value;
+      });
+
+    } else {
+
+      return ads.filter(function (offerData) {
+        var priceFilterValues = {
+          'middle': (offerData.offer.price >= PRICE.low) && (offerData.offer.price < PRICE.high),
+          'low': offerData.offer.price < PRICE.low,
+          'high': offerData.offer.price >= PRICE.high
+        };
+        return priceFilterValues[element.value];
+      });
+    }
+  };
+
+  var checkingFeature = function (ads, item) {
+    return ads.filter(function (offerData) {
+      return offerData.offer.features.indexOf(item.value) >= 0;
+    });
+  };
+
+
   var onChangeFilter = function () {
     var similarAds = window.form.resultData.slice();
     var mapFilterFeatures = mapFilters.querySelectorAll('input[type=checkbox]:checked');
@@ -41,42 +68,18 @@
       'housing-guests': 'guests'
     };
 
-    var checkingSelect = function (element, property) {
-
-      if (property !== 'price') {
-        return similarAds.filter(function (offerData) {
-          return offerData.offer[property].toString() === element.value;
-        });
-
-      } else {
-
-        return similarAds.filter(function (offerData) {
-          var priceFilterValues = {
-            'middle': (offerData.offer.price >= PRICE.low) && (offerData.offer.price < PRICE.high),
-            'low': offerData.offer.price < PRICE.low,
-            'high': offerData.offer.price >= PRICE.high
-          };
-          return priceFilterValues[element.value];
-        });
-      }
-    };
-    var checkingFeature = function (item) {
-      return similarAds.filter(function (offerData) {
-        return offerData.offer.features.indexOf(item.value) >= 0;
-      });
-    };
 
     if (mapFilterSelect.length !== 0) {
       mapFilterSelect.forEach(function (item) {
         if (item.value !== 'any') {
-          similarAds = checkingSelect(item, filtredElement[item.id]);
+          similarAds = checkingSelect(similarAds, item, filtredElement[item.id]);
         }
       });
     }
 
     if (mapFilterFeatures.length !== 0) {
       mapFilterFeatures.forEach(function (item) {
-        similarAds = checkingFeature(item);
+        similarAds = checkingFeature(similarAds, item);
       });
     }
     if (similarAds.length) {
