@@ -3,28 +3,6 @@
 
   var mapClass = document.querySelector('.map');
 
-  var getRandomNumbers = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-
-  var getUniqueElementOfArray = function (targetArray) {
-    var result = (targetArray.splice(getRandomNumbers(0, targetArray.length - 1), 1)).toString();
-    return result;
-  };
-
-  var getUniqueArrayOfArray = function (inputArray, notNull) {
-    var cloneArray = inputArray.slice();
-    var arrayResult = [];
-    var start = 0;
-    if (notNull) {
-      start = 1;
-    }
-    for (var i = 0; i < getRandomNumbers(start, inputArray.length); i++) {
-      arrayResult.push(getUniqueElementOfArray(cloneArray));
-    }
-    return arrayResult;
-  };
-
   window.form.disabled(true);
 
   var onMouseDownMainPin = function (evt) {
@@ -82,9 +60,6 @@
     document.addEventListener('mouseup', onMouseUpMainPin);
   };
   window.map = {
-    onMouseDownMainPin: onMouseDownMainPin,
-    getRandomNumbers: getRandomNumbers,
-    getUniqueElementOfArray: getUniqueElementOfArray,
-    getUniqueArrayOfArray: getUniqueArrayOfArray
+    onMouseDownMainPin: onMouseDownMainPin
   };
 })();

@@ -37,11 +37,7 @@
     }
 
     for (var i = 0; i < fieldsetElements.length; i++) {
-      if (!disabledForm) {
-        fieldsetElements[i].disabled = false;
-      } else {
-        fieldsetElements[i].disabled = true;
-      }
+      fieldsetElements[i].disabled = disabledForm ? true : false;
     }
   };
 
@@ -63,11 +59,7 @@
 
   var onFormElementValidation = function (evt, element) {
     evt = evt === 'not-event' ? element : evt.target;
-    if (evt.checkValidity()) {
-      evt.style.border = '1px solid #d9d9d3';
-    } else {
-      evt.style.border = '4px solid #ff6d51';
-    }
+    evt.style.border = evt.checkValidity() ? '1px solid #d9d9d3' : '4px solid #ff6d51';
   };
 
   var onFormTypeChange = function (validation) {
