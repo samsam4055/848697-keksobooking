@@ -36,6 +36,8 @@
   var mainSection = document.querySelector('main');
   var mapClass = mainSection.querySelector('.map');
   var adForm = mainSection.querySelector('.ad-form');
+  var formCapacity = adForm.querySelector('#capacity');
+  var formCapacityOptions = formCapacity.querySelectorAll('option');
 
   var disabledFormElements = function (disabledForm) {
     var fieldsetElements = adForm.querySelectorAll('fieldset');
@@ -84,8 +86,6 @@
   };
 
   var onFormCapacityValidation = function () {
-    var formCapacity = adForm.querySelector('#capacity');
-    var formCapacityOptions = formCapacity.querySelectorAll('option');
     formCapacityOptions.forEach(function (item) {
       if (item.selected) {
         if (item.disabled) {
@@ -101,8 +101,6 @@
 
   var onFormRoomChange = function () {
     var formRoom = adForm.querySelector('#room_number');
-    var formCapacity = adForm.querySelector('#capacity');
-    var formCapacityOptions = formCapacity.querySelectorAll('option');
     formCapacityOptions.forEach(function (item) {
       switch (formRoom.value) {
         case '100':
@@ -139,7 +137,6 @@
     var formPrice = adForm.querySelector('#price');
     var formType = adForm.querySelector('#type');
     var formRoom = adForm.querySelector('#room_number');
-    var formCapacity = adForm.querySelector('#capacity');
     var selectTimein = adForm.querySelector('#timein');
     var selectTimeout = adForm.querySelector('#timeout');
 
@@ -239,7 +236,6 @@
     var formPrice = adForm.querySelector('#price');
     var formType = adForm.querySelector('#type');
     var formRoom = adForm.querySelector('#room_number');
-    var formCapacity = adForm.querySelector('#capacity');
     var formAvatarFile = adForm.querySelector('.ad-form-header__input');
     var formPhotoFile = adForm.querySelector('.ad-form__input');
     var formDescription = adForm.querySelector('#description');
@@ -289,7 +285,6 @@
     evt.target.blur();
     var formTitle = adForm.querySelector('#title');
     var formPrice = adForm.querySelector('#price');
-    var formCapacity = adForm.querySelector('#capacity');
 
     if (formTitle.validity.valid && formPrice.validity.valid && formCapacity.validity.valid) {
       var formData = new FormData(adForm);

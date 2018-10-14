@@ -2,6 +2,7 @@
 (function () {
 
   var mapFilters = document.querySelector('.map__filters');
+  var mapFilterSelect = mapFilters.querySelectorAll('select');
   var DEBOUNCE_INTERVAL = 500;
   var PRICE = {
     low: 10000,
@@ -31,7 +32,6 @@
 
   var onChangeFilter = function () {
     var similarAds = window.form.resultData.slice();
-    var mapFilterSelect = mapFilters.querySelectorAll('select');
     var mapFilterFeatures = mapFilters.querySelectorAll('input[type=checkbox]:checked');
 
     var filtredElement = {
