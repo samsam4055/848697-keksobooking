@@ -1,6 +1,17 @@
 'use strict';
 (function () {
 
+  var Form = {
+    ELEMENT_VALIDATION: '1px solid #d9d9d3',
+    ELEMENT_NON_VALIDATION: '4px solid #ff6d51',
+    CAPACITY_VALIDATION: 'none',
+    CAPACITY_NON_VALIDATION: '0 0 0 4px #ff6d51',
+    TITLE_MIN_LENGTH: 30,
+    TITLE_MAX_LENGTH: 100,
+    PRICE_MIN: 0,
+    PRICE_MAX: 1000000
+  };
+
   var typePrices = {
     palace: {
       title: 'Дворец',
@@ -59,7 +70,7 @@
 
   var onFormElementValidation = function (evt, element) {
     evt = evt === 'not-event' ? element : evt.target;
-    evt.style.border = evt.checkValidity() ? '1px solid #d9d9d3' : '4px solid #ff6d51';
+    evt.style.border = evt.checkValidity() ? Form.ELEMENT_VALIDATION : Form.ELEMENT_NON_VALIDATION;
   };
 
   var onFormTypeChange = function (validation) {
@@ -79,10 +90,10 @@
       if (item.selected) {
         if (item.disabled) {
           formCapacity.setCustomValidity('Выберете другое количество мест');
-          formCapacity.style.boxShadow = '0 0 0 4px #ff6d51';
+          formCapacity.style.boxShadow = Form.CAPACITY_NON_VALIDATION;
         } else {
           formCapacity.setCustomValidity('');
-          formCapacity.style.boxShadow = 'none';
+          formCapacity.style.boxShadow = Form.CAPACITY_VALIDATION;
         }
       }
     });
@@ -136,13 +147,13 @@
     formCapacity.value = temporaryFormInfo.capacity;
 
     formTitle.required = true;
-    formTitle.setAttribute('minlength', 30);
-    formTitle.setAttribute('maxlength', 100);
+    formTitle.setAttribute('minlength', Form.TITLE_MIN_LENGTH);
+    formTitle.setAttribute('maxlength', Form.TITLE_MAX_LENGTH);
     formTitle.addEventListener('input', onFormElementValidation);
 
     formPrice.required = true;
-    formPrice.setAttribute('min', 0);
-    formPrice.setAttribute('max', 1000000);
+    formPrice.setAttribute('min', Form.PRICE_MIN);
+    formPrice.setAttribute('max', Form.PRICE_MAX);
     formPrice.addEventListener('input', onFormElementValidation);
 
     formType.addEventListener('change', onFormTypeChange);
@@ -237,9 +248,9 @@
     var formTimein = adForm.querySelector('#timein');
     var formTimeout = adForm.querySelector('#timeout');
 
-    formTitle.style.border = '1px solid #d9d9d3';
-    formPrice.style.border = '1px solid #d9d9d3';
-    formCapacity.style.boxShadow = 'none';
+    formTitle.style.border = Form.ELEMENT_VALIDATION;
+    formPrice.style.border = Form.ELEMENT_VALIDATION;
+    formCapacity.style.boxShadow = Form.CAPACITY_VALIDATION;
 
     formType.value = temporaryFormInfo.type;
     formRoom.value = temporaryFormInfo.roomNumber;

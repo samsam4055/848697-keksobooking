@@ -2,6 +2,7 @@
 (function () {
 
   var mapClass = document.querySelector('.map');
+  var mainPinHalfHeight = window.variable.MainPin.HEIGHT / 2;
 
   window.form.disabled(true);
 
@@ -49,7 +50,7 @@
         window.form.disabled(false);
         window.backend.request(window.form.getLoad, window.form.showError);
 
-        mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (window.variable.MainPin.HEIGHT / 2))) + 'px';
+        mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - mainPinHalfHeight)) + 'px';
       }
 
       window.variable.MainPin.getCoordinateMainPin();
