@@ -31,11 +31,19 @@
     }
   };
 
+  var FORM_ROOM_CAPACITY = {
+    '100': ['0'],
+    '1': ['1'],
+    '2': ['2', '1'],
+    '3': ['3', '2', '1'],
+  };
+
   var resultData;
 
   var mainSection = document.querySelector('main');
   var mapClass = mainSection.querySelector('.map');
   var adForm = mainSection.querySelector('.ad-form');
+  var formRoom = adForm.querySelector('#room_number');
   var formCapacity = adForm.querySelector('#capacity');
   var formCapacityOptions = formCapacity.querySelectorAll('option');
 
@@ -100,24 +108,9 @@
   };
 
   var onFormRoomChange = function () {
-    var formRoom = adForm.querySelector('#room_number');
-    formCapacityOptions.forEach(function (item) {
-      switch (formRoom.value) {
-        case '100':
-          item.disabled = (item.value === '0') ? false : true;
-          break;
-        case '1':
-          item.disabled = (item.value === '1') ? false : true;
-          break;
-        case '2':
-          item.disabled = (item.value >= '1' && item.value <= '2') ? false : true;
-          break;
-        case '3':
-          item.disabled = (item.value >= '1' && item.value <= '3') ? false : true;
-          break;
-      }
+    [].forEach.call(formCapacity.options, function (item) {
+      item.disabled = (FORM_ROOM_CAPACITY[formRoom.value].indexOf(item.value) >= 0) ? false : true;
     });
-
     onFormCapacityValidation();
   };
 
@@ -136,7 +129,6 @@
     var formTitle = adForm.querySelector('#title');
     var formPrice = adForm.querySelector('#price');
     var formType = adForm.querySelector('#type');
-    var formRoom = adForm.querySelector('#room_number');
     var selectTimein = adForm.querySelector('#timein');
     var selectTimeout = adForm.querySelector('#timeout');
 
@@ -235,7 +227,6 @@
     var formTitle = adForm.querySelector('#title');
     var formPrice = adForm.querySelector('#price');
     var formType = adForm.querySelector('#type');
-    var formRoom = adForm.querySelector('#room_number');
     var formAvatarFile = adForm.querySelector('.ad-form-header__input');
     var formPhotoFile = adForm.querySelector('.ad-form__input');
     var formDescription = adForm.querySelector('#description');
