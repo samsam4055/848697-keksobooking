@@ -55,8 +55,9 @@
   var addPhoto = function (inputFile) {
     var file = inputFile ? inputFile : photoInput.files;
     var fileName;
-    for (var i = 0; i < file.length; i++) {
-      fileName = file[i].name.toLowerCase();
+
+    [].forEach.call(file, function (item) {
+      fileName = item.name.toLowerCase();
       var matches = FILE_TYPES.some(function (it) {
         return fileName.endsWith(it);
       });
@@ -65,9 +66,9 @@
         reader.addEventListener('load', function (evt) {
           renderPhoto(evt.target.result);
         });
-        reader.readAsDataURL(file[i]);
+        reader.readAsDataURL(item);
       }
-    }
+    });
   };
 
   var onImageDrop = function (evt) {
@@ -90,7 +91,7 @@
   };
 
 
-  var addevent = function () {
+  var addEvent = function () {
     avatarInput.addEventListener('change', onClickInputAvatar);
     avatarDropZone.addEventListener('dragenter', onImageDrop);
     avatarDropZone.addEventListener('dragleave', onImageDrop);
@@ -118,7 +119,7 @@
     photoDropZone.removeEventListener('drop', onImageDrop);
   };
   window.image = {
-    addEvent: addevent,
+    addEvent: addEvent,
     removeEvent: removeEvent,
     clear: clearImages
   };

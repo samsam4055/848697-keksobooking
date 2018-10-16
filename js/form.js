@@ -137,13 +137,13 @@
     formCapacity.value = temporaryFormInfo.capacity;
 
     formTitle.required = true;
-    formTitle.setAttribute('minlength', Form.TITLE_MIN_LENGTH);
-    formTitle.setAttribute('maxlength', Form.TITLE_MAX_LENGTH);
+    formTitle.minLength = Form.TITLE_MIN_LENGTH;
+    formTitle.maxLength = Form.TITLE_MAX_LENGTH;
     formTitle.addEventListener('input', onFormElementValidation);
 
     formPrice.required = true;
-    formPrice.setAttribute('min', Form.PRICE_MIN);
-    formPrice.setAttribute('max', Form.PRICE_MAX);
+    formPrice.min = Form.PRICE_MIN;
+    formPrice.max = Form.PRICE_MAX;
     formPrice.addEventListener('input', onFormElementValidation);
 
     formType.addEventListener('change', onFormTypeChange);

@@ -15,7 +15,7 @@
     mainPin.style.left = window.variable.MainPin.defaultX;
     mainPin.style.top = window.variable.MainPin.defaultY;
     mainPin.addEventListener('mousedown', window.map.onMouseDownMainPin);
-    addressInput.setAttribute('readonly', '');
+    addressInput.readOnly = true;
     window.variable.MainPin.getCoordinateMainPin('center');
     window.card.close();
   };
