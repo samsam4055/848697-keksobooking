@@ -74,6 +74,7 @@
     window.pin.remove();
     window.form.resultData = undefined;
     disabledFormElements(true);
+    window.image.removeEvent();
     window.run.autoStart();
 
   };

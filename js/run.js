@@ -6,6 +6,10 @@
     var mainPin = mainSection.querySelector('.map__pin--main');
     var addressInput = mainSection.querySelector('#address');
     var mapFilters = mainSection.querySelector('.map__filters');
+    var photoPreview = mainSection.querySelectorAll('.ad-form__photo');
+    photoPreview.forEach(function (item) {
+      item.remove();
+    });
     mapFilters.reset();
     window.filter.disable(true);
     mainPin.style.left = window.variable.MainPin.defaultX;

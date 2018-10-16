@@ -48,6 +48,7 @@
 
       if (mapClass.classList.contains('map--faded')) {
         window.form.disabled(false);
+        window.image.addEvent();
         window.backend.request(window.form.getLoad, window.form.showError);
 
         mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - mainPinHalfHeight)) + 'px';
