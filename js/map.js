@@ -2,28 +2,7 @@
 (function () {
 
   var mapClass = document.querySelector('.map');
-
-  var getRandomNumbers = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-
-  var getUniqueElementOfArray = function (targetArray) {
-    var result = (targetArray.splice(getRandomNumbers(0, targetArray.length - 1), 1)).toString();
-    return result;
-  };
-
-  var getUniqueArrayOfArray = function (inputArray, notNull) {
-    var cloneArray = inputArray.slice();
-    var arrayResult = [];
-    var start = 0;
-    if (notNull) {
-      start = 1;
-    }
-    for (var i = 0; i < getRandomNumbers(start, inputArray.length); i++) {
-      arrayResult.push(getUniqueElementOfArray(cloneArray));
-    }
-    return arrayResult;
-  };
+  var mainPinHalfHeight = window.variable.MainPin.HEIGHT / 2;
 
   window.form.disabled(true);
 
@@ -69,9 +48,10 @@
 
       if (mapClass.classList.contains('map--faded')) {
         window.form.disabled(false);
+        window.image.addEvent();
         window.backend.request(window.form.getLoad, window.form.showError);
 
-        mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - (window.variable.MainPin.HEIGHT / 2))) + 'px';
+        mainPin.style.top = (Math.round((parseInt(mainPin.style.top, 10)) - mainPinHalfHeight)) + 'px';
       }
 
       window.variable.MainPin.getCoordinateMainPin();
@@ -82,9 +62,6 @@
     document.addEventListener('mouseup', onMouseUpMainPin);
   };
   window.map = {
-    onMouseDownMainPin: onMouseDownMainPin,
-    getRandomNumbers: getRandomNumbers,
-    getUniqueElementOfArray: getUniqueElementOfArray,
-    getUniqueArrayOfArray: getUniqueArrayOfArray
+    onMouseDownMainPin: onMouseDownMainPin
   };
 })();

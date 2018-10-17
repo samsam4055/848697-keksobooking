@@ -1,6 +1,17 @@
 'use strict';
 (function () {
 
+  var Form = {
+    ELEMENT_VALIDATION: '1px solid #d9d9d3',
+    ELEMENT_NON_VALIDATION: '4px solid #ff6d51',
+    CAPACITY_VALIDATION: 'none',
+    CAPACITY_NON_VALIDATION: '0 0 0 4px #ff6d51',
+    TITLE_MIN_LENGTH: 30,
+    TITLE_MAX_LENGTH: 100,
+    PRICE_MIN: 0,
+    PRICE_MAX: 1000000
+  };
+
   var typePrices = {
     palace: {
       title: 'Дворец',
@@ -20,11 +31,21 @@
     }
   };
 
+  var FORM_ROOM_CAPACITY = {
+    '100': ['0'],
+    '1': ['1'],
+    '2': ['2', '1'],
+    '3': ['3', '2', '1'],
+  };
+
   var resultData;
 
   var mainSection = document.querySelector('main');
   var mapClass = mainSection.querySelector('.map');
   var adForm = mainSection.querySelector('.ad-form');
+  var formRoom = adForm.querySelector('#room_number');
+  var formCapacity = adForm.querySelector('#capacity');
+  var formCapacityOptions = formCapacity.querySelectorAll('option');
 
   var disabledFormElements = function (disabledForm) {
     var fieldsetElements = adForm.querySelectorAll('fieldset');
@@ -37,11 +58,7 @@
     }
 
     for (var i = 0; i < fieldsetElements.length; i++) {
-      if (!disabledForm) {
-        fieldsetElements[i].disabled = false;
-      } else {
-        fieldsetElements[i].disabled = true;
-      }
+      fieldsetElements[i].disabled = disabledForm ? true : false;
     }
   };
 
@@ -57,17 +74,14 @@
     window.pin.remove();
     window.form.resultData = undefined;
     disabledFormElements(true);
+    window.image.removeEvent();
     window.run.autoStart();
 
   };
 
   var onFormElementValidation = function (evt, element) {
     evt = evt === 'not-event' ? element : evt.target;
-    if (evt.checkValidity()) {
-      evt.style.border = '1px solid #d9d9d3';
-    } else {
-      evt.style.border = '4px solid #ff6d51';
-    }
+    evt.style.border = evt.checkValidity() ? Form.ELEMENT_VALIDATION : Form.ELEMENT_NON_VALIDATION;
   };
 
   var onFormTypeChange = function (validation) {
@@ -81,42 +95,23 @@
   };
 
   var onFormCapacityValidation = function () {
-    var formCapacity = adForm.querySelector('#capacity');
-    var formCapacityOptions = formCapacity.querySelectorAll('option');
     formCapacityOptions.forEach(function (item) {
       if (item.selected) {
         if (item.disabled) {
           formCapacity.setCustomValidity('Выберете другое количество мест');
-          formCapacity.style.boxShadow = '0 0 0 4px #ff6d51';
+          formCapacity.style.boxShadow = Form.CAPACITY_NON_VALIDATION;
         } else {
           formCapacity.setCustomValidity('');
-          formCapacity.style.boxShadow = 'none';
+          formCapacity.style.boxShadow = Form.CAPACITY_VALIDATION;
         }
       }
     });
   };
 
   var onFormRoomChange = function () {
-    var formRoom = adForm.querySelector('#room_number');
-    var formCapacity = adForm.querySelector('#capacity');
-    var formCapacityOptions = formCapacity.querySelectorAll('option');
-    formCapacityOptions.forEach(function (item) {
-      switch (formRoom.value) {
-        case '100':
-          item.disabled = (item.value === '0') ? false : true;
-          break;
-        case '1':
-          item.disabled = (item.value === '1') ? false : true;
-          break;
-        case '2':
-          item.disabled = (item.value >= '1' && item.value <= '2') ? false : true;
-          break;
-        case '3':
-          item.disabled = (item.value >= '1' && item.value <= '3') ? false : true;
-          break;
-      }
+    [].forEach.call(formCapacity.options, function (item) {
+      item.disabled = (FORM_ROOM_CAPACITY[formRoom.value].indexOf(item.value) >= 0) ? false : true;
     });
-
     onFormCapacityValidation();
   };
 
@@ -135,8 +130,6 @@
     var formTitle = adForm.querySelector('#title');
     var formPrice = adForm.querySelector('#price');
     var formType = adForm.querySelector('#type');
-    var formRoom = adForm.querySelector('#room_number');
-    var formCapacity = adForm.querySelector('#capacity');
     var selectTimein = adForm.querySelector('#timein');
     var selectTimeout = adForm.querySelector('#timeout');
 
@@ -144,13 +137,13 @@
     formCapacity.value = temporaryFormInfo.capacity;
 
     formTitle.required = true;
-    formTitle.setAttribute('minlength', 30);
-    formTitle.setAttribute('maxlength', 100);
+    formTitle.minLength = Form.TITLE_MIN_LENGTH;
+    formTitle.maxLength = Form.TITLE_MAX_LENGTH;
     formTitle.addEventListener('input', onFormElementValidation);
 
     formPrice.required = true;
-    formPrice.setAttribute('min', 0);
-    formPrice.setAttribute('max', 1000000);
+    formPrice.min = Form.PRICE_MIN;
+    formPrice.max = Form.PRICE_MAX;
     formPrice.addEventListener('input', onFormElementValidation);
 
     formType.addEventListener('change', onFormTypeChange);
@@ -235,8 +228,6 @@
     var formTitle = adForm.querySelector('#title');
     var formPrice = adForm.querySelector('#price');
     var formType = adForm.querySelector('#type');
-    var formRoom = adForm.querySelector('#room_number');
-    var formCapacity = adForm.querySelector('#capacity');
     var formAvatarFile = adForm.querySelector('.ad-form-header__input');
     var formPhotoFile = adForm.querySelector('.ad-form__input');
     var formDescription = adForm.querySelector('#description');
@@ -245,9 +236,9 @@
     var formTimein = adForm.querySelector('#timein');
     var formTimeout = adForm.querySelector('#timeout');
 
-    formTitle.style.border = '1px solid #d9d9d3';
-    formPrice.style.border = '1px solid #d9d9d3';
-    formCapacity.style.boxShadow = 'none';
+    formTitle.style.border = Form.ELEMENT_VALIDATION;
+    formPrice.style.border = Form.ELEMENT_VALIDATION;
+    formCapacity.style.boxShadow = Form.CAPACITY_VALIDATION;
 
     formType.value = temporaryFormInfo.type;
     formRoom.value = temporaryFormInfo.roomNumber;
@@ -286,7 +277,6 @@
     evt.target.blur();
     var formTitle = adForm.querySelector('#title');
     var formPrice = adForm.querySelector('#price');
-    var formCapacity = adForm.querySelector('#capacity');
 
     if (formTitle.validity.valid && formPrice.validity.valid && formCapacity.validity.valid) {
       var formData = new FormData(adForm);
